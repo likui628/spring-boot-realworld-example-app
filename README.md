@@ -9,7 +9,7 @@
 
 You need Java 11 installed.
 
-    ./gradlew bootRun
+    ./mvnw spring-boot:run
 
 To test that it works, open a browser tab at http://localhost:8080/tags .  
 
@@ -18,5 +18,5 @@ To test that it works, open a browser tab at http://localhost:8080/tags .
 
 The repository contains a lot of test cases to cover both api test and repository test.
 
-    ./gradlew test
+    ./mvnw test
 
