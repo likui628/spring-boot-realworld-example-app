@@ -7,7 +7,7 @@
 
 # Getting started
 
-You need Java 8 installed.
+You need Java 11 installed.
 
     ./gradlew bootRun
 
