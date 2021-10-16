@@ -11,9 +11,9 @@ import lombok.Getter;
 @JsonRootName("errors")
 @JsonSerialize(using = ErrorResourceSerializer.class)
 public class ErrorResource {
-    private final List<FieldErrorResource> fieldErrorResource;
+    private final List<FieldErrorResource> fieldErrors;
 
-    public ErrorResource(List<FieldErrorResource> fieldErrorResource) {
-        this.fieldErrorResource = fieldErrorResource;
+    public ErrorResource(List<FieldErrorResource> fieldErrors) {
+        this.fieldErrors = fieldErrors;
     }
 }
