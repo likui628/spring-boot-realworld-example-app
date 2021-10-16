@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.example.realworld.api.exception.InvalidRequestException;
 import com.example.realworld.model.User;
 import com.example.realworld.service.UsersService;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -33,13 +34,15 @@ public class UsersApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> creeteUser(@Valid @RequestBody RegisterParam registerParam, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new RuntimeException("bindingResult has errors");
+            throw new InvalidRequestException(bindingResult);
         }
         if (usersService.findByUsername(registerParam.getUsername()).isPresent()) {
-            throw new RuntimeException("username duplicated");
+            bindingResult.rejectValue("username", "duplicated", "username duplicated");
+            throw new InvalidRequestException(bindingResult);
         }
         if (usersService.findByEmail(registerParam.getEmail()).isPresent()) {
-            throw new RuntimeException("email duplicated");
+            bindingResult.rejectValue("username", "duplicated", "email duplicated");
+            throw new InvalidRequestException(bindingResult);
         }
         User user = new User(registerParam.getEmail(), registerParam.getUsername(), registerParam.getPassword(), "",
                 "");
