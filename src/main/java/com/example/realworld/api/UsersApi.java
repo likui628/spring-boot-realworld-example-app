@@ -1,5 +1,7 @@
 package com.example.realworld.api;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -7,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import com.example.realworld.api.exception.InvalidRequestException;
 import com.example.realworld.model.User;
 import com.example.realworld.service.UsersService;
+import com.example.realworld.service.EncryptService;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +28,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(path = "users")
 public class UsersApi {
     private final UsersService usersService;
+    private final EncryptService encryptService;
 
     @Autowired
-    public UsersApi(UsersService usersService) {
+    public UsersApi(UsersService usersService, EncryptService encryptService) {
         this.usersService = usersService;
+        this.encryptService = encryptService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> creeteUser(@Valid @RequestBody RegisterParam registerParam, BindingResult bindingResult) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody RegisterParam registerParam, BindingResult bindingResult)
+            throws UnsupportedEncodingException {
         if (bindingResult.hasErrors()) {
             throw new InvalidRequestException(bindingResult);
         }
@@ -44,9 +50,11 @@ public class UsersApi {
             bindingResult.rejectValue("username", "duplicated", "email duplicated");
             throw new InvalidRequestException(bindingResult);
         }
-        User user = new User(registerParam.getEmail(), registerParam.getUsername(), registerParam.getPassword(), "",
-                "");
+
+        User user = new User(registerParam.getEmail(), registerParam.getUsername(),
+                encryptService.encrypt(registerParam.getPassword()), "", "");
         usersService.save(user);
+
         return ResponseEntity.status(201).body(usersService.findByUsername(user.getUsername()));
     }
 }
