@@ -4,6 +4,7 @@
 
 
 ![Actions](https://github.com/likui628/spring-boot-realworld-example-app/workflows/Test/badge.svg)
+![codeql](https://github.com/likui628/spring-boot-realworld-example-app/workflows/CodeQL/badge.svg)
 
 # Getting started
 
