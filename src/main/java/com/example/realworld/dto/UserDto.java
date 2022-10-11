@@ -1,8 +1,6 @@
 package com.example.realworld.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,14 +8,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-@JsonTypeName("user")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonRootName(value = "user")
 public class UserDto {
+
     private String email;
+
     private String token;
 
-    @JsonProperty("username")
-    private String name;
+    private String username;
+
     private String bio;
+
     private String image;
 }
