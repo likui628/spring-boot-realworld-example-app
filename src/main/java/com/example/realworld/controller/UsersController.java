@@ -6,6 +6,7 @@ import com.example.realworld.model.RegistrationParam;
 import com.example.realworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 public class UsersController {
 
     private final UserService userService;
+    private AuthenticationManager authenticationManager;
 
     @PostMapping
     public UserDto registration(@RequestBody @Valid RegistrationParam param) {

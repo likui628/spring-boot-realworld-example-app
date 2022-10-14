@@ -5,6 +5,7 @@ import com.example.realworld.model.LoginParam;
 import com.example.realworld.model.RegistrationParam;
 
 public interface UserService {
+
     UserDto registration(RegistrationParam param);
 
     UserDto login(LoginParam param);
