@@ -1,7 +1,6 @@
 # ![RealWorld Example App](example-logo.png)
 
-> ### Spring boot + MyBatis codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
-
+> ### Spring boot + JPA real world examples
 
 ![Actions](https://github.com/likui628/spring-boot-realworld-example-app/workflows/Test/badge.svg)
 ![codeql](https://github.com/likui628/spring-boot-realworld-example-app/workflows/CodeQL/badge.svg)
