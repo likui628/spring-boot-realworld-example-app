@@ -5,6 +5,7 @@ import com.example.realworld.entity.UserEntity;
 import com.example.realworld.model.LoginParam;
 import com.example.realworld.model.RegistrationParam;
 import com.example.realworld.repository.UserRepository;
+import com.example.realworld.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,18 @@ public class UserServiceImp implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtUtils jwtUtils;
+
     @Override
     public UserDto registration(RegistrationParam param) {
-        userRepository.findByUsernameOrEmail(param.getUsername(), param.getEmail())
+        userRepository.findByNameOrEmail(param.getUsername(), param.getEmail())
                 .ifPresent((entity) -> {
-                    System.out.println(entity);
                     throw new IllegalStateException("用户已存在");
                 });
         UserEntity userEntity = UserEntity.builder()
-                .username(param.getUsername())
-                .email(param.getEmail()).bio("")
+                .name(param.getUsername())
+                .email(param.getEmail())
+                .bio("")
                 .password(passwordEncoder.encode(param.getPassword()))
                 .build();
         userRepository.save(userEntity);
@@ -43,11 +46,11 @@ public class UserServiceImp implements UserService {
 
     private UserDto convertToUserDto(UserEntity userEntity) {
         return UserDto.builder()
-                .username(userEntity.getUsername())
+                .username(userEntity.getName())
                 .email(userEntity.getEmail())
                 .bio("")
                 .image("")
-                .token("fakeToken")
+                .token(jwtUtils.encode(userEntity.getEmail()))
                 .build();
     }
 }

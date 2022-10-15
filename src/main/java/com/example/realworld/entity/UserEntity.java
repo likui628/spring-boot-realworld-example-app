@@ -19,8 +19,8 @@ import java.util.Collection;
 @Builder
 public class UserEntity extends BaseEntity implements UserDetails {
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -37,6 +37,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override
