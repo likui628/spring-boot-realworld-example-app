@@ -7,6 +7,7 @@ import com.example.realworld.model.RegistrationParam;
 import com.example.realworld.repository.UserRepository;
 import com.example.realworld.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,13 @@ public class UserServiceImp implements UserService {
     public UserDto login(LoginParam param) {
         UserEntity userEntity = userRepository.findByEmail(param.getEmail())
                 .filter(user -> passwordEncoder.matches(param.getPassword(), user.getPassword()))
+                .orElseThrow(() -> new IllegalStateException("用户不存在"));
+        return convertToUserDto(userEntity);
+    }
+
+    @Override
+    public UserDto currentUser(UserDetails userDetails) {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new IllegalStateException("用户不存在"));
         return convertToUserDto(userEntity);
     }
