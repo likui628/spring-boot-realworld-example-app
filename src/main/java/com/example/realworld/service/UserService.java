@@ -12,4 +12,6 @@ public interface UserService {
     UserDto login(LoginParam param);
 
     UserDto currentUser(UserDetails userDetails);
+
+    UserDto updateUser(UserDto userDto, UserDetails userDetails);
 }

@@ -52,6 +52,36 @@ public class UserServiceImp implements UserService {
         return convertToUserDto(userEntity);
     }
 
+    @Override
+    public UserDto updateUser(UserDto userDto, UserDetails userDetails) {
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalStateException("用户不存在"));
+        if (userDto.getEmail() != null) {
+            userRepository.findByEmail(userDto.getEmail())
+                    .filter(found -> !found.getId().equals(userEntity.getId()))
+                    .ifPresent(found -> {
+                        throw new IllegalStateException("用户已存在");
+                    });
+            userEntity.setEmail(userDto.getEmail());
+        }
+        if (userDto.getUsername() != null) {
+            userRepository.findByName(userDto.getUsername())
+                    .filter(found -> !found.getId().equals(userEntity.getId()))
+                    .ifPresent(found -> {
+                        throw new IllegalStateException("用户已存在");
+                    });
+            userEntity.setName(userDto.getUsername());
+        }
+        if (userDto.getBio() != null) {
+            userEntity.setBio(userDto.getBio());
+        }
+        if (userDto.getImage() != null) {
+            userEntity.setImage(userDto.getImage());
+        }
+        userRepository.save(userEntity);
+        return convertToUserDto(userEntity);
+    }
+
     private UserDto convertToUserDto(UserEntity userEntity) {
         return UserDto.builder()
                 .username(userEntity.getName())

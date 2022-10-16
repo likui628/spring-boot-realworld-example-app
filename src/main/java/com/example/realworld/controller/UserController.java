@@ -5,9 +5,7 @@ import com.example.realworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -17,7 +15,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public UserDto currentUser(@AuthenticationPrincipal UserDetails userDetails){
+    public UserDto currentUser(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.currentUser(userDetails);
     }
+
+    @PutMapping
+    public UserDto updateUser(@RequestBody UserDto userDto, @AuthenticationPrincipal UserDetails userDetails) {
+        return userService.updateUser(userDto, userDetails);
+    }
+
 }
