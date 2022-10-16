@@ -13,7 +13,7 @@ public class RealworldApplication {
     }
 
     @Bean
-    public Faker getFaker(){
+    public Faker getFaker() {
         return new Faker();
     }
 
