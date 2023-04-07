@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "tags")
@@ -18,13 +17,13 @@ public class TagsController {
     private final TagsService tagsService;
 
     @GetMapping
-    public ResponseEntity getTags(){
+    public ResponseEntity getTags() {
         return ResponseEntity.ok(
-          new HashMap<String,Object>(){
-              {
-                  put("tags", tagsService.allTags());
-              }
-          }
+                new HashMap<String, Object>() {
+                    {
+                        put("tags", tagsService.allTags());
+                    }
+                }
         );
     }
 }

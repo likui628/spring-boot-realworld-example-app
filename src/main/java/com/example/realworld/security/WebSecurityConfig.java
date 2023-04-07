@@ -20,6 +20,8 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
+                .antMatchers(HttpMethod.POST, "/users", "/users/login")
+                .permitAll()
                 .antMatchers(HttpMethod.GET, "/tags")
                 .permitAll();
         return http.build();
