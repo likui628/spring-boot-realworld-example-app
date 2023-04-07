@@ -1,6 +1,6 @@
 # ![RealWorld Example App](example-logo.png)
 
-> ### Spring boot + JPA real world examples
+> ### Spring boot + MyBatis real world examples
 
 ![Actions](https://github.com/likui628/spring-boot-realworld-example-app/workflows/Test/badge.svg)
 ![codeql](https://github.com/likui628/spring-boot-realworld-example-app/workflows/CodeQL/badge.svg)
