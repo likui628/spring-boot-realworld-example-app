@@ -2,16 +2,16 @@ package com.example.realworld.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @JsonTypeName("user")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
@@ -35,7 +35,6 @@ public class UserDto {
     @JsonTypeName("user")
     @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class RegisterParam {
         @NotBlank(message = "can't be empty")
         @Email(message = "should be an email")
@@ -45,6 +44,19 @@ public class UserDto {
         private String username;
 
         @NotBlank(message = "can't be empty")
+        private String password;
+    }
+
+    @Getter
+    @JsonTypeName("user")
+    @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT,use = JsonTypeInfo.Id.NAME)
+    @AllArgsConstructor
+    public static class LoginParam {
+        @NotNull
+        @Email
+        private String email;
+
+        @NotBlank
         private String password;
     }
 }

@@ -10,4 +10,7 @@
                 #{user.bio},
                 #{user.image})
     </insert>
+    <select id="findByEmail" resultType="com.example.realworld.dto.UserDto">
+        select id, username, email, password, bio, image from users where email = #{email}
+    </select>
 </mapper>
