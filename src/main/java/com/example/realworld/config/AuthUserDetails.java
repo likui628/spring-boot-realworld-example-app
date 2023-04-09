@@ -30,6 +30,10 @@ public class AuthUserDetails implements UserDetails {
         return email;
     }
 
+    public String getUserId() {
+        return id;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
