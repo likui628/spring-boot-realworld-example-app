@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,7 +23,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(final UserDto.RegisterParam registerParam) {
         UserEntity user = UserEntity.builder()
-                .id(UUID.randomUUID().toString())
                 .email(registerParam.getEmail())
                 .username(registerParam.getUsername())
                 .password(passwordEncoder.encode(registerParam.getPassword()))

@@ -1,14 +1,15 @@
 package com.example.realworld.domain.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@Builder
+import java.util.UUID;
+
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class UserEntity {
 
     private String id;
@@ -22,4 +23,14 @@ public class UserEntity {
     private String bio;
 
     private String image;
+
+    @Builder
+    public UserEntity(String email, String username, String password, String bio, String image) {
+        this.id = UUID.randomUUID().toString();
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.bio = bio;
+        this.image = image;
+    }
 }
