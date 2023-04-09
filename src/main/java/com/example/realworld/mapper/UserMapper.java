@@ -10,7 +10,7 @@ import java.util.Optional;
 @Mapper
 public interface UserMapper {
 
-    void insert(@Param("user") UserDto user);
+    void insert(@Param("user") UserEntity user);
 
     Optional<UserEntity> findByEmail(@Param("email") String email);
 }

@@ -1,5 +1,6 @@
 package com.example.realworld.service.impl;
 
+import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.config.JwtService;
 import com.example.realworld.domain.dto.UserDto;
 import com.example.realworld.domain.entity.UserEntity;
@@ -23,15 +24,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(final UserDto.RegisterParam registerParam) {
-        UserDto user = UserDto.builder().email(registerParam.getEmail())
+        UserEntity user = UserEntity.builder()
                 .id(UUID.randomUUID().toString())
+                .email(registerParam.getEmail())
                 .username(registerParam.getUsername())
                 .password(passwordEncoder.encode(registerParam.getPassword()))
                 .bio("")
                 .image("")
                 .build();
         userMapper.insert(user);
-        return user;
+
+        return convertEntityToDto(user);
     }
 
     @Override
@@ -43,8 +46,18 @@ public class UserServiceImpl implements UserService {
         return convertEntityToDto(userEntity);
     }
 
+    @Override
+    public UserDto currentUser(AuthUserDetails authUserDetails) {
+        UserEntity userEntity = userMapper
+                .findByEmail(authUserDetails.getUsername())
+                .orElseThrow(() -> new IllegalStateException("Exception"));
+
+        return convertEntityToDto(userEntity);
+    }
+
     private UserDto convertEntityToDto(UserEntity userEntity) {
         return UserDto.builder()
+                .id(userEntity.getId())
                 .username(userEntity.getUsername())
                 .bio(userEntity.getBio())
                 .email(userEntity.getEmail())
