@@ -4,6 +4,8 @@ import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.config.JwtService;
 import com.example.realworld.domain.dto.UserDto;
 import com.example.realworld.domain.entity.UserEntity;
+import com.example.realworld.domain.model.LoginParam;
+import com.example.realworld.domain.model.RegisterParam;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
 
     @Override
-    public UserDto createUser(final UserDto.RegisterParam registerParam) {
+    public UserDto createUser(final RegisterParam registerParam) {
         UserEntity user = UserEntity.builder()
                 .email(registerParam.getEmail())
                 .username(registerParam.getUsername())
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto login(UserDto.LoginParam loginParam) {
+    public UserDto login(LoginParam loginParam) {
         UserEntity userEntity = userMapper.findByEmail(loginParam.getEmail())
                 .filter(user -> passwordEncoder.matches(loginParam.getPassword(), user.getPassword()))
                 .orElseThrow(() -> new IllegalStateException("Invalid"));
