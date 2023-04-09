@@ -1,4 +1,4 @@
-package com.example.realworld.dto;
+package com.example.realworld.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;

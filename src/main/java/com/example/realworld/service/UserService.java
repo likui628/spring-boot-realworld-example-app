@@ -1,6 +1,6 @@
 package com.example.realworld.service;
 
-import com.example.realworld.dto.UserDto;
+import com.example.realworld.domain.dto.UserDto;
 
 public interface UserService {
 

@@ -1,8 +1,9 @@
 package com.example.realworld.service.impl;
 
-import com.example.realworld.dto.UserDto;
+import com.example.realworld.config.JwtService;
+import com.example.realworld.domain.dto.UserDto;
+import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.mapper.UserMapper;
-import com.example.realworld.service.JwtService;
 import com.example.realworld.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,10 +36,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto login(UserDto.LoginParam loginParam) {
-        UserDto userDto = userMapper.findByEmail(loginParam.getEmail())
+        UserEntity userEntity = userMapper.findByEmail(loginParam.getEmail())
                 .filter(user -> passwordEncoder.matches(loginParam.getPassword(), user.getPassword()))
                 .orElseThrow(() -> new IllegalStateException("Invalid"));
-        userDto.setToken(jwtService.toToken(userDto));
-        return userDto;
+
+        return convertEntityToDto(userEntity);
+    }
+
+    private UserDto convertEntityToDto(UserEntity userEntity) {
+        return UserDto.builder()
+                .username(userEntity.getUsername())
+                .bio(userEntity.getBio())
+                .email(userEntity.getEmail())
+                .image(userEntity.getImage())
+                .token(jwtService.toToken(userEntity))
+                .build();
     }
 }
