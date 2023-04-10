@@ -13,4 +13,6 @@ public interface UserMapper {
     void insert(@Param("user") UserEntity user);
 
     Optional<UserEntity> findByEmail(@Param("email") String email);
+
+    Optional<UserEntity> findByUsername(@Param("username") String email);
 }

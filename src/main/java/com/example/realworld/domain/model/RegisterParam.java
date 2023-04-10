@@ -1,5 +1,6 @@
 package com.example.realworld.domain.model;
 
+import com.example.realworld.validation.DuplicatedUser;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @JsonTypeName("user")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @AllArgsConstructor
+@DuplicatedUser
 public class RegisterParam {
 
     @NotBlank(message = "can't be empty")

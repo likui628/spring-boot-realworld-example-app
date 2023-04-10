@@ -11,6 +11,13 @@
                 #{user.image})
     </insert>
     <select id="findByEmail" resultType="com.example.realworld.domain.entity.UserEntity">
-        select id, username, email, password, bio, image from users where email = #{email}
+        select id, username, email, password, bio, image
+        from users
+        where email = #{email}
+    </select>
+    <select id="findByUsername" resultType="com.example.realworld.domain.entity.UserEntity">
+        select id, username, email, password, bio, image
+        from users
+        where username = #{username}
     </select>
 </mapper>
