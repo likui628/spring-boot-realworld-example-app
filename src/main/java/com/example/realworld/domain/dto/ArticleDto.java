@@ -19,6 +19,8 @@ import java.util.List;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class ArticleDto {
 
+    private String id;
+
     private String slug;
 
     @NotNull

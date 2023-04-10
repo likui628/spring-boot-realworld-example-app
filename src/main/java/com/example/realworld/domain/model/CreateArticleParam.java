@@ -1,5 +1,6 @@
 package com.example.realworld.domain.model;
 
+import com.example.realworld.validation.UniqueSlug;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class CreateArticleParam {
 
     @NotBlank(message = "can't be empty")
+    @UniqueSlug
     private String title;
 
     @NotBlank(message = "can't be empty")

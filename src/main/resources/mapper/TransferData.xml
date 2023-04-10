@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="transfer.data">
+    <resultMap id="articleDto" type="com.example.realworld.domain.dto.ArticleDto">
+        <id column="articleId" property="id"/>
+        <result column="articleSlug" property="slug"/>
+        <result column="articleTitle" property="title"/>
+        <result column="articleDescription" property="description"/>
+        <result column="articleBody" property="body"/>
+        <result column="articleCreatedAt" property="createdAt"/>
+        <result column="articleUpdatedAt" property="updatedAt"/>
+        <collection property="tagList" javaType="list" ofType="string">
+            <result column="tagName"/>
+        </collection>
+    </resultMap>
+
+</mapper>

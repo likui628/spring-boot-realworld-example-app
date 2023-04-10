@@ -30,4 +30,23 @@
         from tags
         where name = #{name}
     </select>
+    <sql id="selectArticle">
+        select A.id          articleId,
+               A.slug        articleSlug,
+               A.title       articleTitle,
+               A.description articleDescription,
+               A.body        articleBody,
+               A.user_id     articleUserId,
+               A.created_at  articleCreatedAt,
+               A.updated_at  articleUpdatedAt,
+               T.id          tagId,
+               T.name        tagName
+        from articles A
+                 left join article_tags AT on A.id = AT.article_id
+                 left join tags T on T.id = AT.tag_id
+    </sql>
+    <select id="findBySlug" resultMap="transfer.data.articleDto">
+        <include refid="selectArticle"/>
+        where slug = #{slug}
+    </select>
 </mapper>

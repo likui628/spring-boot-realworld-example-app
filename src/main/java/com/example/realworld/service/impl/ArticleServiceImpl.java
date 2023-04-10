@@ -47,6 +47,11 @@ public class ArticleServiceImpl implements ArticleService {
         return convertEntityToDto(articleEntity);
     }
 
+    @Override
+    public Optional<ArticleDto> findBySlug(String slug) {
+        return Optional.ofNullable(articleMapper.findBySlug(slug));
+    }
+
     private ArticleDto convertEntityToDto(ArticleEntity articleEntity) {
         return ArticleDto.builder()
                 .body(articleEntity.getBody())
