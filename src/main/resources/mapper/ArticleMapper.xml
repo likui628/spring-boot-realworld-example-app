@@ -13,4 +13,21 @@
                 #{article.createdAt},
                 #{article.updatedAt})
     </insert>
+
+    <insert id="insertTag">
+        insert into tags(id, name)
+        values (#{tag.id},
+                #{tag.name})
+    </insert>
+
+    <insert id="insertArticleTagRelation">
+        insert into article_tags(article_id, tag_id)
+        values (#{articleId}, #{tagId})
+    </insert>
+
+    <select id="findTag" resultType="com.example.realworld.domain.entity.TagEntity">
+        select id, name
+        from tags
+        where name = #{name}
+    </select>
 </mapper>

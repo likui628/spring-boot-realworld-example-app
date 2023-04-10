@@ -3,12 +3,15 @@ package com.example.realworld.service.impl;
 import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.entity.ArticleEntity;
+import com.example.realworld.domain.entity.TagEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +21,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleMapper articleMapper;
 
     @Override
+    @Transactional
     public ArticleDto createArticle(CreateArticleParam articleParam, AuthUserDetails userDetails) {
         ArticleEntity articleEntity = ArticleEntity.builder()
                 .userId(userDetails.getUserId())
@@ -26,6 +30,18 @@ public class ArticleServiceImpl implements ArticleService {
                 .title(articleParam.getTitle())
                 .description(articleParam.getDescription())
                 .build();
+
+        articleParam.getTagList().stream()
+                .map(TagEntity::new)
+                .map(tagEntity -> Optional.ofNullable(articleMapper.findTag(tagEntity.getName()))
+                        .orElseGet(() -> {
+                            articleMapper.insertTag(tagEntity);
+                            return tagEntity;
+                        }))
+                .forEach(tagEntity -> {
+                    articleMapper.insertArticleTagRelation(articleEntity.getId(), tagEntity.getId());
+                });
+
         articleMapper.insert(articleEntity);
 
         return convertEntityToDto(articleEntity);
