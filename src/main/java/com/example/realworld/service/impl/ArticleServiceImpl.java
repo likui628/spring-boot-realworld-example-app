@@ -6,6 +6,7 @@ import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.TagEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
+import com.example.realworld.mapper.TagMapper;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleMapper articleMapper;
+
+    private final TagMapper tagsMapper;
 
     @Override
     @Transactional
@@ -35,7 +38,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(TagEntity::new)
                 .map(tagEntity -> Optional.ofNullable(articleMapper.findTag(tagEntity.getName()))
                         .orElseGet(() -> {
-                            articleMapper.insertTag(tagEntity);
+                            tagsMapper.insert(tagEntity);
                             return tagEntity;
                         }))
                 .forEach(tagEntity -> {

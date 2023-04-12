@@ -1,6 +1,6 @@
 package com.example.realworld.controller;
 
-import com.example.realworld.service.TagsService;
+import com.example.realworld.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,14 +14,14 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class TagsController {
 
-    private final TagsService tagsService;
+    private final TagService tagService;
 
     @GetMapping
     public ResponseEntity getTags() {
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {
                     {
-                        put("tags", tagsService.allTags());
+                        put("tags", tagService.allTags());
                     }
                 }
         );

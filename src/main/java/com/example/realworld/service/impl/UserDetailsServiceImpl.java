@@ -21,7 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         .id(userEntity.getId())
                         .email(userEntity.getEmail())
                         .build())
-                .orElse(null);
-
+                .orElseThrow(() -> new UsernameNotFoundException("username not found"));
     }
 }
