@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,5 +67,12 @@ public class ArticleServiceImpl implements ArticleService {
                 .createdAt(articleEntity.getCreatedAt())
                 .updatedAt(articleEntity.getUpdatedAt())
                 .build();
+    }
+
+    @Override
+    public List<ArticleDto> queryArticles(Integer limit, Integer offset) {
+        List<ArticleDto> articles = articleMapper.queryArticles(limit, offset);
+
+        return articles;
     }
 }

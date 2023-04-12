@@ -58,4 +58,12 @@
         <include refid="selectArticle"/>
         where slug = #{slug}
     </select>
+
+    <select id="queryArticles" resultMap="articleDto">
+        <include refid="selectArticle"/>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+
 </mapper>

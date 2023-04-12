@@ -7,12 +7,11 @@ import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/articles")
@@ -24,8 +23,23 @@ public class ArticlesController {
     @PostMapping
     public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
                                         @AuthenticationPrincipal AuthUserDetails userDetails) {
-        ArticleDto articleDto = articleService.createArticle(createArticleParam,userDetails);
+        ArticleDto articleDto = articleService.createArticle(createArticleParam, userDetails);
 
         return ResponseEntity.status(200).body(articleDto);
+    }
+
+    @GetMapping
+    public ResponseEntity getArticles(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                      @RequestParam(value = "limit", defaultValue = "20") int limit) {
+        List<ArticleDto> articles = articleService.queryArticles(limit, offset);
+
+        return ResponseEntity.ok(
+                new HashMap<String, Object>() {
+                    {
+                        put("articles", articles);
+                        put("articlesCount", articles.size());
+                    }
+                }
+        );
     }
 }
