@@ -27,4 +27,11 @@ public class ProfilesController {
 
         return ResponseEntity.ok(profileService.followByUsername(username, authUserDetails));
     }
+
+    @DeleteMapping("/follow")
+    public ResponseEntity deleteProfiles(@PathVariable("username") String username,
+                                         @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+
+        return ResponseEntity.ok(profileService.unfollowByUsername(username, authUserDetails));
+    }
 }

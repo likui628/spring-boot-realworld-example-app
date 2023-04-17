@@ -16,4 +16,6 @@ public interface UserMapper {
     Optional<UserEntity> findByUsername(@Param("username") String email);
 
     void insertFollows(@Param("userId") String userId, @Param("followId") String followId);
+
+    void deleteFollows(@Param("userId") String userId, @Param("followId") String followId);
 }

@@ -8,4 +8,6 @@ public interface ProfileService {
     ProfileDto findByUsername(String username);
 
     ProfileDto followByUsername(String username, AuthUserDetails currentUser);
+
+    ProfileDto unfollowByUsername(String username, AuthUserDetails currentUser);
 }

@@ -14,6 +14,12 @@
         insert into follows(user_id, follow_id)
         values (#{userId}, #{followId})
     </insert>
+    <delete id="deleteFollows">
+        delete
+        from follows
+        where user_id = #{userId}
+          and follow_id = #{followId}
+    </delete>
     <select id="findByEmail" resultType="com.example.realworld.domain.entity.UserEntity">
         select id, username, email, password, bio, image
         from users
