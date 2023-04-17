@@ -10,6 +10,10 @@
                 #{user.bio},
                 #{user.image})
     </insert>
+    <insert id="insertFollows">
+        insert into follows(user_id, follow_id)
+        values (#{userId}, #{followId})
+    </insert>
     <select id="findByEmail" resultType="com.example.realworld.domain.entity.UserEntity">
         select id, username, email, password, bio, image
         from users
