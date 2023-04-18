@@ -5,7 +5,7 @@ import com.example.realworld.domain.dto.ProfileDto;
 
 public interface ProfileService {
 
-    ProfileDto findByUsername(String username);
+    ProfileDto findByUsername(String username, AuthUserDetails currentUser);
 
     ProfileDto followByUsername(String username, AuthUserDetails currentUser);
 

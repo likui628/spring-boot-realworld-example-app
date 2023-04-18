@@ -2,11 +2,14 @@ package com.example.realworld.service.impl;
 
 import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.domain.dto.ProfileDto;
+import com.example.realworld.domain.entity.FollowEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,11 +19,13 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserMapper userMapper;
 
     @Override
-    public ProfileDto findByUsername(String username) {
+    public ProfileDto findByUsername(String username, AuthUserDetails currentUser) {
         UserEntity userEntity = userMapper.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("Exception"));
 
-        return convertEntityToDto(userEntity, false);
+        final Optional<FollowEntity> follows = userMapper.findFollows(userEntity.getId(), currentUser.getUserId());
+
+        return convertEntityToDto(userEntity, follows.isPresent());
     }
 
     @Override
@@ -28,7 +33,7 @@ public class ProfileServiceImpl implements ProfileService {
         UserEntity userEntity = userMapper.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("Exception"));
 
-        userMapper.insertFollows(currentUser.getUserId(), userEntity.getId());
+        userMapper.insertFollows(userEntity.getId(), currentUser.getUserId());
 
         return convertEntityToDto(userEntity, true);
     }
@@ -38,7 +43,7 @@ public class ProfileServiceImpl implements ProfileService {
         UserEntity userEntity = userMapper.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("Exception"));
 
-        userMapper.deleteFollows(currentUser.getUserId(), userEntity.getId());
+        userMapper.deleteFollows(userEntity.getId(), currentUser.getUserId());
 
         return convertEntityToDto(userEntity, false);
     }

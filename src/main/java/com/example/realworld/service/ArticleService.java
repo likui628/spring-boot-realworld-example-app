@@ -2,7 +2,6 @@ package com.example.realworld.service;
 
 import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.domain.dto.ArticleDto;
-import com.example.realworld.domain.dto.ArticleDtoList;
 import com.example.realworld.domain.model.CreateArticleParam;
 
 import java.util.List;
