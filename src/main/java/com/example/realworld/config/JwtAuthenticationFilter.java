@@ -30,11 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains("/users")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith(TOKEN_PREFIX))
                 .map(authHeader -> authHeader.substring(TOKEN_PREFIX.length()))

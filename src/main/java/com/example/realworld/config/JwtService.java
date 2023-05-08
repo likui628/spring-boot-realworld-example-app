@@ -1,9 +1,9 @@
 package com.example.realworld.config;
 
-import com.example.realworld.domain.dto.UserDto;
 import com.example.realworld.domain.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,22 +31,30 @@ public class JwtService {
     }
 
     public String getSub(String token) {
-        Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token);
-        return claimsJws.getBody().getSubject();
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return claimsJws.getBody().getSubject();
+        } catch (JwtException e) {
+            return null;
+        }
     }
 
     public boolean validateToken(String token) {
-        Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token);
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token);
 
-        Date now = new Date(System.currentTimeMillis());
-        Date expiration = claimsJws.getBody().getExpiration();
-        return expiration.after(now);
+            Date now = new Date(System.currentTimeMillis());
+            Date expiration = claimsJws.getBody().getExpiration();
+            return expiration.after(now);
+        } catch (JwtException e) {
+            return false;
+        }
     }
 
     private Key getSignKey() {
