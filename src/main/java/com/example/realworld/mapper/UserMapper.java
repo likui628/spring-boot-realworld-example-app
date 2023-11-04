@@ -21,4 +21,6 @@ public interface UserMapper {
     void deleteFollows(@Param("userId") String userId, @Param("followId") String followId);
 
     Optional<FollowEntity> findFollows(@Param("userId") String userId, @Param("followId") String followId);
+
+    UserEntity findById(@Param("id") String id);
 }

@@ -36,4 +36,9 @@
         from users
         where username = #{username}
     </select>
+    <select id="findById" resultType="com.example.realworld.domain.entity.UserEntity">
+        select id, username, email, password, bio, image
+        from users
+        where id = #{id}
+    </select>
 </mapper>

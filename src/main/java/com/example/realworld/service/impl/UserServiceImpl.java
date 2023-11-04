@@ -8,32 +8,41 @@ import com.example.realworld.domain.model.LoginParam;
 import com.example.realworld.domain.model.RegisterParam;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.UserService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+
+    private String defaultImage;
 
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
 
+    public UserServiceImpl(UserMapper userMapper, @Value("${image.default}") String defaultImage, PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.userMapper = userMapper;
+        this.defaultImage = defaultImage;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
+
     @Override
-    public UserDto createUser(final RegisterParam registerParam) {
+    public UserEntity createUser(final RegisterParam registerParam) {
         UserEntity user = UserEntity.builder()
                 .email(registerParam.getEmail())
                 .username(registerParam.getUsername())
                 .password(passwordEncoder.encode(registerParam.getPassword()))
                 .bio("")
-                .image("")
+                .image(defaultImage)
                 .build();
         userMapper.insert(user);
-
-        return convertEntityToDto(user);
+        return user;
     }
 
     @Override
@@ -52,6 +61,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalStateException("Exception"));
 
         return convertEntityToDto(userEntity);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(String id) {
+        return Optional.ofNullable(userMapper.findById(id));
     }
 
     private UserDto convertEntityToDto(UserEntity userEntity) {
