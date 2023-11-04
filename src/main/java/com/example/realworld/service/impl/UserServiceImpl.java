@@ -1,6 +1,5 @@
 package com.example.realworld.service.impl;
 
-import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.config.JwtService;
 import com.example.realworld.domain.dto.UserDto;
 import com.example.realworld.domain.entity.UserEntity;
@@ -52,12 +51,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalStateException("Invalid"));
     }
 
-    @Override
-    public UserEntity currentUser(AuthUserDetails authUserDetails) {
-
-        return findByEmail(authUserDetails.getUsername())
-                .orElseThrow(() -> new IllegalStateException("Exception"));
-    }
 
     @Override
     public Optional<UserEntity> findById(String id) {
