@@ -18,4 +18,6 @@ public interface UserService {
     Optional<UserEntity> findById(String id);
 
     Optional<UserEntity> findByEmail(String email);
+
+    Optional<UserEntity> findByUsername(String userName);
 }

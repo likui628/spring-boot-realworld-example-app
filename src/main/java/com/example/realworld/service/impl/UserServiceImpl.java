@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity currentUser(AuthUserDetails authUserDetails) {
-        
+
         return findByEmail(authUserDetails.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Exception"));
     }
@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findByEmail(String email) {
         return Optional.ofNullable(userMapper.findByEmail(email));
+    }
+
+    @Override
+    public Optional<UserEntity> findByUsername(String userName) {
+        return Optional.ofNullable(userMapper.findByUsername(userName));
     }
 
     private UserDto convertEntityToDto(UserEntity userEntity) {

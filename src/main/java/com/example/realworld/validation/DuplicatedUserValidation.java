@@ -14,7 +14,7 @@ public class DuplicatedUserValidation implements ConstraintValidator<DuplicatedU
 
     @Override
     public boolean isValid(RegisterParam value, ConstraintValidatorContext context) {
-        return false;
-//        return userService.findByEmail(value.getEmail()).isEmpty() && userService.findByUsername(value.getUsername()).isEmpty();
+        return userService.findByEmail(value.getEmail()).isEmpty()
+                && userService.findByUsername(value.getUsername()).isEmpty();
     }
 }
