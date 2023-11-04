@@ -5,6 +5,7 @@ import com.example.realworld.domain.dto.UserDto;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.LoginParam;
 import com.example.realworld.domain.model.RegisterParam;
+import com.example.realworld.domain.model.UpdateUserParam;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +66,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findByUsername(String userName) {
         return Optional.ofNullable(userMapper.findByUsername(userName));
+    }
+
+    @Override
+    public void updateUser(UserEntity targetUser, UpdateUserParam updateParam) {
+        UserEntity user = targetUser;
+        user.update(
+                updateParam.getEmail(),
+                updateParam.getUsername(),
+                updateParam.getPassword(),
+                updateParam.getBio(),
+                updateParam.getImage());
+
+        userMapper.save(user);
     }
 
     private UserDto convertEntityToDto(UserEntity userEntity) {

@@ -23,4 +23,6 @@ public interface UserMapper {
     Optional<FollowEntity> findFollows(@Param("userId") String userId, @Param("followId") String followId);
 
     UserEntity findById(@Param("id") String id);
+
+    void save(@Param("user") UserEntity user);
 }
