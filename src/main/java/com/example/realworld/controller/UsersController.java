@@ -33,9 +33,8 @@ public class UsersController {
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginParam loginParam) {
-        UserDto user = userService.login(loginParam);
-
-        return ResponseEntity.status(200).body(user);
+        UserEntity userData = userService.login(loginParam);
+        return ResponseEntity.ok(new UserDto(userData, jwtService.toToken(userData)));
     }
 }
 

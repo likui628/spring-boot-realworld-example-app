@@ -46,26 +46,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto login(LoginParam loginParam) {
-        UserEntity userEntity = userMapper.findByEmail(loginParam.getEmail())
+    public UserEntity login(LoginParam loginParam) {
+        return findByEmail(loginParam.getEmail())
                 .filter(user -> passwordEncoder.matches(loginParam.getPassword(), user.getPassword()))
                 .orElseThrow(() -> new IllegalStateException("Invalid"));
-
-        return convertEntityToDto(userEntity);
     }
 
     @Override
-    public UserDto currentUser(AuthUserDetails authUserDetails) {
-        UserEntity userEntity = userMapper
-                .findByEmail(authUserDetails.getUsername())
+    public UserEntity currentUser(AuthUserDetails authUserDetails) {
+        
+        return findByEmail(authUserDetails.getUsername())
                 .orElseThrow(() -> new IllegalStateException("Exception"));
-
-        return convertEntityToDto(userEntity);
     }
 
     @Override
     public Optional<UserEntity> findById(String id) {
         return Optional.ofNullable(userMapper.findById(id));
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return Optional.ofNullable(userMapper.findByEmail(email));
     }
 
     private UserDto convertEntityToDto(UserEntity userEntity) {
