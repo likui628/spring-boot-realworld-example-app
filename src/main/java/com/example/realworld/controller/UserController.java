@@ -27,14 +27,13 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity updateUser(
-            @AuthenticationPrincipal UserEntity authUserDetails,
+            @AuthenticationPrincipal UserEntity user,
             @RequestHeader(value = "Authorization") String authorization,
             @Valid @RequestBody UpdateUserParam updateParam
     ) {
-        UserEntity userData = userService.findById(authUserDetails.getId()).get();
-        userService.updateUser(userData, updateParam);
+        userService.updateUser(user, updateParam);
 
-        UserEntity updatedUserData = userService.findById(authUserDetails.getId()).get();
+        UserEntity updatedUserData = userService.findById(user.getId()).get();
         return ResponseEntity.ok(new UserDto(updatedUserData, authorization.split(" ")[1]));
     }
 }
