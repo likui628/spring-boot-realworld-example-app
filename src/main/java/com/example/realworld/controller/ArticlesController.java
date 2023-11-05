@@ -1,7 +1,7 @@
 package com.example.realworld.controller;
 
-import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.domain.dto.ArticleDto;
+import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class ArticlesController {
 
     @PostMapping
     public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
-                                        @AuthenticationPrincipal AuthUserDetails userDetails) {
+                                        @AuthenticationPrincipal UserEntity userDetails) {
         ArticleDto articleDto = articleService.createArticle(createArticleParam, userDetails);
 
         return ResponseEntity.status(200).body(articleDto);

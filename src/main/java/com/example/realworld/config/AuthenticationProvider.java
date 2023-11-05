@@ -1,27 +1,28 @@
 package com.example.realworld.config;
 
+import com.example.realworld.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class AuthenticationProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final UserMapper userMapper;
 
     public Authentication getAuthentication(String userId) {
         return Optional.ofNullable(userId)
-                .map(userDetailsService::loadUserByUsername)
-                .map(userDetails ->
+                .map(userMapper::findById)
+                .map(userEntity ->
                         new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                userDetails.getPassword(),
-                                userDetails.getAuthorities()
+                                userEntity,
+                                null,
+                                Collections.emptyList()
                         ))
                 .orElse(null);
     }

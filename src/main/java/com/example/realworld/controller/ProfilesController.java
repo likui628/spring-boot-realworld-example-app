@@ -1,6 +1,6 @@
 package com.example.realworld.controller;
 
-import com.example.realworld.config.AuthUserDetails;
+import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +16,20 @@ public class ProfilesController {
 
     @GetMapping
     public ResponseEntity getProfiles(@PathVariable("username") String username,
-                                      @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+                                      @AuthenticationPrincipal UserEntity authUserDetails) {
         return ResponseEntity.ok(profileService.findByUsername(username, authUserDetails));
     }
 
     @PostMapping("/follow")
     public ResponseEntity followProfiles(@PathVariable("username") String username,
-                                         @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+                                         @AuthenticationPrincipal UserEntity authUserDetails) {
 
         return ResponseEntity.ok(profileService.followByUsername(username, authUserDetails));
     }
 
     @DeleteMapping("/follow")
     public ResponseEntity deleteProfiles(@PathVariable("username") String username,
-                                         @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+                                         @AuthenticationPrincipal UserEntity authUserDetails) {
 
         return ResponseEntity.ok(profileService.unfollowByUsername(username, authUserDetails));
     }

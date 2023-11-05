@@ -23,7 +23,7 @@ public class JwtService {
 
     public String toToken(UserEntity user) {
         return Jwts.builder()
-                .setSubject(user.getEmail())
+                .setSubject(user.getId())
                 .signWith(getSignKey())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

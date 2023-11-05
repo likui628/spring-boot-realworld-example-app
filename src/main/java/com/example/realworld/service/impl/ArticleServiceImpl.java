@@ -1,9 +1,9 @@
 package com.example.realworld.service.impl;
 
-import com.example.realworld.config.AuthUserDetails;
 import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.TagEntity;
+import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.mapper.TagMapper;
@@ -26,9 +26,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public ArticleDto createArticle(CreateArticleParam articleParam, AuthUserDetails userDetails) {
+    public ArticleDto createArticle(CreateArticleParam articleParam, UserEntity userDetails) {
         ArticleEntity articleEntity = ArticleEntity.builder()
-                .userId(userDetails.getUserId())
+                .userId(userDetails.getId())
                 .body(articleParam.getBody())
                 .tags(articleParam.getTagList())
                 .title(articleParam.getTitle())
