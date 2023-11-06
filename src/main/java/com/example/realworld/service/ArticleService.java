@@ -1,6 +1,7 @@
 package com.example.realworld.service;
 
 import com.example.realworld.domain.dto.ArticleDto;
+import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 
@@ -9,9 +10,11 @@ import java.util.Optional;
 
 public interface ArticleService {
 
-    ArticleDto createArticle(final CreateArticleParam article, final UserEntity userDetails);
+    ArticleEntity createArticle(final CreateArticleParam article, final UserEntity currentUser);
 
     Optional<ArticleDto> findBySlug(String slug);
+
+    Optional<ArticleDto> findById(String id, final UserEntity currentUser);
 
     List<ArticleDto> queryArticles(Integer limit, Integer offset);
 }

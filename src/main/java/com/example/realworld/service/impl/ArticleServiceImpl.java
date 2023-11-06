@@ -26,9 +26,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public ArticleDto createArticle(CreateArticleParam articleParam, UserEntity userDetails) {
+    public ArticleEntity createArticle(CreateArticleParam articleParam, UserEntity currentUser) {
         ArticleEntity articleEntity = ArticleEntity.builder()
-                .userId(userDetails.getId())
+                .userId(currentUser.getId())
                 .body(articleParam.getBody())
                 .tags(articleParam.getTagList())
                 .title(articleParam.getTitle())
@@ -37,23 +37,29 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleParam.getTagList().stream()
                 .map(TagEntity::new)
-                .map(tagEntity -> Optional.ofNullable(articleMapper.findTag(tagEntity.getName()))
-                        .orElseGet(() -> {
-                            tagsMapper.insert(tagEntity);
-                            return tagEntity;
-                        }))
+                .map(tagEntity ->
+                        Optional.ofNullable(articleMapper.findTag(tagEntity.getName()))
+                                .orElseGet(() -> {
+                                    tagsMapper.insert(tagEntity);
+                                    return tagEntity;
+                                }))
                 .forEach(tagEntity -> {
                     articleMapper.insertArticleTagRelation(articleEntity.getId(), tagEntity.getId());
                 });
 
         articleMapper.insert(articleEntity);
-
-        return convertEntityToDto(articleEntity);
+        return articleEntity;
     }
 
     @Override
     public Optional<ArticleDto> findBySlug(String slug) {
         return Optional.ofNullable(articleMapper.findBySlug(slug));
+    }
+
+    public Optional<ArticleDto> findById(String id, final UserEntity currentUser) {
+        ArticleDto articleDto = articleMapper.findById(id);
+        //TODO fill extra info
+        return Optional.ofNullable(articleDto);
     }
 
     private ArticleDto convertEntityToDto(ArticleEntity articleEntity) {

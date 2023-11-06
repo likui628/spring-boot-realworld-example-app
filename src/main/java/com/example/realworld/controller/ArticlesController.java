@@ -1,6 +1,7 @@
 package com.example.realworld.controller;
 
 import com.example.realworld.domain.dto.ArticleDto;
+import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.service.ArticleService;
@@ -22,10 +23,10 @@ public class ArticlesController {
 
     @PostMapping
     public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
-                                        @AuthenticationPrincipal UserEntity userDetails) {
-        ArticleDto articleDto = articleService.createArticle(createArticleParam, userDetails);
-
-        return ResponseEntity.status(200).body(articleDto);
+                                        @AuthenticationPrincipal UserEntity currentUser) {
+        ArticleEntity article = articleService.createArticle(createArticleParam, currentUser);
+        
+        return ResponseEntity.ok(articleService.findById(article.getId(), currentUser));
     }
 
     @GetMapping

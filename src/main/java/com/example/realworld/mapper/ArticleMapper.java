@@ -20,4 +20,6 @@ public interface ArticleMapper {
     ArticleDto findBySlug(@Param("slug") String slug);
 
     List<ArticleDto> queryArticles(@Param("limit") Integer limit, @Param("offset") Integer offset);
+
+    ArticleDto findById(@Param("id") String id);
 }

@@ -65,5 +65,10 @@
         offset #{offset}
     </select>
 
+    <select id="findById" resultMap="articleDto">
+        <include refid="selectArticle"/>
+        where id = #{id}
+    </select>
+
 
 </mapper>
