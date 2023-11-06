@@ -23,14 +23,12 @@ public class ProfilesController {
     @PostMapping("/follow")
     public ResponseEntity followProfiles(@PathVariable("username") String username,
                                          @AuthenticationPrincipal UserEntity currentUser) {
-
         return ResponseEntity.ok(profileService.followByUsername(username, currentUser));
     }
 
     @DeleteMapping("/follow")
     public ResponseEntity deleteProfiles(@PathVariable("username") String username,
-                                         @AuthenticationPrincipal UserEntity authUserDetails) {
-
-        return ResponseEntity.ok(profileService.unfollowByUsername(username, authUserDetails));
+                                         @AuthenticationPrincipal UserEntity currentUser) {
+        return ResponseEntity.ok(profileService.unfollowByUsername(username, currentUser));
     }
 }

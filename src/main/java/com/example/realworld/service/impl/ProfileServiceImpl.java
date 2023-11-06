@@ -38,12 +38,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileDto unfollowByUsername(String username, UserEntity currentUser) {
-        UserEntity userEntity = userService.findByUsername(username)
+        return userService
+                .findByUsername(username)
+                .map(target -> {
+                    userMapper.deleteFollows(target.getId(), currentUser.getId());
+                    return new ProfileDto(target, false);
+                })
                 .orElseThrow(() -> new IllegalStateException("Exception"));
-
-        userMapper.deleteFollows(userEntity.getId(), currentUser.getId());
-
-        return convertEntityToDto(userEntity, false);
     }
 
     private ProfileDto convertEntityToDto(UserEntity userEntity, boolean following) {
