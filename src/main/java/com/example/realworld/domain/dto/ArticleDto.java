@@ -34,8 +34,7 @@ public class ArticleDto {
     private String body;
 
     private List<String> tagList;
-
-    // TODO ISO 8601 timestamp
+    
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
