@@ -52,4 +52,10 @@
         </set>
         where id = #{user.id}
     </update>
+    <select id="isUserFollowing" resultType="java.lang.Boolean">
+        select count(1)
+        from follows
+        where user_id = #{userId}
+          and follow_id = #{anotherUserId}
+    </select>
 </mapper>

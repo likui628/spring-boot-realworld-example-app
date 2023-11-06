@@ -16,8 +16,8 @@ public class ProfilesController {
 
     @GetMapping
     public ResponseEntity getProfiles(@PathVariable("username") String username,
-                                      @AuthenticationPrincipal UserEntity authUserDetails) {
-        return ResponseEntity.ok(profileService.findByUsername(username, authUserDetails));
+                                      @AuthenticationPrincipal UserEntity currentUser) {
+        return ResponseEntity.ok(profileService.findByUsername(username, currentUser));
     }
 
     @PostMapping("/follow")

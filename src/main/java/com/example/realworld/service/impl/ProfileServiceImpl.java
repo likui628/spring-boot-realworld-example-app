@@ -1,15 +1,12 @@
 package com.example.realworld.service.impl;
 
 import com.example.realworld.domain.dto.ProfileDto;
-import com.example.realworld.domain.entity.FollowEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.ProfileService;
 import com.example.realworld.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +19,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileDto findByUsername(String username, UserEntity currentUser) {
-        UserEntity userEntity = userService.findByUsername(username)
+        return userService
+                .findByUsername(username)
+                .map(user -> new ProfileDto(user, currentUser != null && userMapper.isUserFollowing(currentUser.getId(), user.getId())))
                 .orElseThrow(() -> new IllegalStateException("Exception"));
-
-        final Optional<FollowEntity> follows = userMapper.findFollows(userEntity.getId(), currentUser.getId());
-
-        return convertEntityToDto(userEntity, follows.isPresent());
     }
 
     @Override

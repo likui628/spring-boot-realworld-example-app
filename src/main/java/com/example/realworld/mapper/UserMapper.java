@@ -25,4 +25,6 @@ public interface UserMapper {
     UserEntity findById(@Param("id") String id);
 
     void save(@Param("user") UserEntity user);
+
+    boolean isUserFollowing(@Param("userId") String userId, @Param("anotherUserId") String anotherUserId);
 }

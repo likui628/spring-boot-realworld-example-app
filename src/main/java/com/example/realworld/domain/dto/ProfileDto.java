@@ -1,5 +1,6 @@
 package com.example.realworld.domain.dto;
 
+import com.example.realworld.domain.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonTypeName("profile")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT,use = JsonTypeInfo.Id.NAME)
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class ProfileDto {
 
     private String bio;
@@ -22,4 +23,12 @@ public class ProfileDto {
     private String username;
 
     private String image;
+
+
+    public ProfileDto(UserEntity user, boolean following) {
+        this.bio = user.getBio();
+        this.username = user.getUsername();
+        this.image = user.getImage();
+        this.following = following;
+    }
 }
