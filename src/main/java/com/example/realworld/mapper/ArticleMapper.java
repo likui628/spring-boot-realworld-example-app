@@ -25,5 +25,7 @@ public interface ArticleMapper {
 
     void insertArticleUserRelation(@Param("articleId") String articleId, @Param("userId") String userId);
 
+    void removeArticleUserRelation(@Param("articleId") String articleId, @Param("userId") String userId);
+
     boolean isArticleFollowing(@Param("articleId") String articleId, @Param("userId") String userId);
 }

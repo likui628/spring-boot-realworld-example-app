@@ -19,4 +19,6 @@ public interface ArticleService {
     List<ArticleDto> queryArticles(Integer limit, Integer offset);
 
     void insertArticleUserRelation(String article_id, String user_id);
+
+    void removeArticleUserRelation(String article_id, String user_id);
 }

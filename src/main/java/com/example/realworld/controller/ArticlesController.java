@@ -48,12 +48,24 @@ public class ArticlesController {
     }
 
     @PostMapping("/{slug}/favorite")
-    public ResponseEntity postFavoriteArticle(@PathVariable String slug,
-                                              @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity favoriteArticle(@PathVariable("slug") String slug,
+                                          @AuthenticationPrincipal UserEntity user) {
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.insertArticleUserRelation(article.getId(), user.getId());
+                    return articleService.findById(article.getId(), user);
+                })
+                .orElseThrow(() -> new IllegalStateException("Exception"));
 
+        return ResponseEntity.ok(articleDto);
+    }
+
+    @DeleteMapping("/{slug}/favorite")
+    public ResponseEntity unfavoriteArticle(@PathVariable("slug") String slug,
+                                            @AuthenticationPrincipal UserEntity user) {
+        ArticleDto articleDto = articleService.findBySlug(slug)
+                .map(article -> {
+                    articleService.removeArticleUserRelation(article.getId(), user.getId());
                     return articleService.findById(article.getId(), user);
                 })
                 .orElseThrow(() -> new IllegalStateException("Exception"));

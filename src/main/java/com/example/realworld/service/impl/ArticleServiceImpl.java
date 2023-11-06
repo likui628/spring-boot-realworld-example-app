@@ -95,6 +95,14 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    @Override
+    public void removeArticleUserRelation(String article_id, String user_id) {
+        boolean following = articleMapper.isArticleFollowing(article_id, user_id);
+        if (!following) {
+            articleMapper.removeArticleUserRelation(article_id, user_id);
+        }
+    }
+
     // TODO fill extra article info
     private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {
         articleDto.setFavoritesCount(100);

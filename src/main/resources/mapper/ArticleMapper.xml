@@ -67,6 +67,14 @@
         values (#{articleId}, #{userId})
     </insert>
 
+    <insert id="removeArticleUserRelation">
+        delete
+        from article_favorites
+        where user_id = #{userId}
+          and article_id = #{articleId}
+
+    </insert>
+
     <select id="isArticleFollowing" resultType="java.lang.Boolean">
         select count(1)
         from article_favorites
