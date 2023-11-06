@@ -22,4 +22,8 @@ public interface ArticleMapper {
     List<ArticleDto> queryArticles(@Param("limit") Integer limit, @Param("offset") Integer offset);
 
     ArticleDto findById(@Param("id") String id);
+
+    void insertArticleUserRelation(@Param("articleId") String articleId, @Param("userId") String userId);
+
+    boolean isArticleFollowing(@Param("articleId") String articleId, @Param("userId") String userId);
 }

@@ -87,6 +87,14 @@ public class ArticleServiceImpl implements ArticleService {
         return articles;
     }
 
+    @Override
+    public void insertArticleUserRelation(String article_id, String user_id) {
+        boolean following = articleMapper.isArticleFollowing(article_id, user_id);
+        if (!following) {
+            articleMapper.insertArticleUserRelation(article_id, user_id);
+        }
+    }
+
     // TODO fill extra article info
     private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {
         articleDto.setFavoritesCount(100);

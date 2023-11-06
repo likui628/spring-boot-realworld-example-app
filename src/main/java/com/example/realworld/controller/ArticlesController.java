@@ -4,6 +4,7 @@ import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
+import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ArticlesController {
 
     private final ArticleService articleService;
+
+    private final ArticleMapper articleMapper;
 
     @PostMapping
     public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
@@ -42,5 +45,19 @@ public class ArticlesController {
                     }
                 }
         );
+    }
+
+    @PostMapping("/{slug}/favorite")
+    public ResponseEntity postFavoriteArticle(@PathVariable String slug,
+                                              @AuthenticationPrincipal UserEntity user) {
+        ArticleDto articleDto = articleService.findBySlug(slug)
+                .map(article -> {
+                    articleService.insertArticleUserRelation(article.getId(), user.getId());
+
+                    return articleService.findById(article.getId(), user);
+                })
+                .orElseThrow(() -> new IllegalStateException("Exception"));
+
+        return ResponseEntity.ok(articleDto);
     }
 }

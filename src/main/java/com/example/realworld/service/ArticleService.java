@@ -17,4 +17,6 @@ public interface ArticleService {
     ArticleDto findById(String id, final UserEntity currentUser);
 
     List<ArticleDto> queryArticles(Integer limit, Integer offset);
+
+    void insertArticleUserRelation(String article_id, String user_id);
 }
