@@ -27,12 +27,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileDto followByUsername(String username, UserEntity currentUser) {
-        UserEntity userEntity = userService.findByUsername(username)
+        return userService
+                .findByUsername(username)
+                .map(target -> {
+                    userMapper.insertFollows(target.getId(), currentUser.getId());
+                    return new ProfileDto(target, true);
+                })
                 .orElseThrow(() -> new IllegalStateException("Exception"));
-
-        userMapper.insertFollows(userEntity.getId(), currentUser.getId());
-
-        return convertEntityToDto(userEntity, true);
     }
 
     @Override
