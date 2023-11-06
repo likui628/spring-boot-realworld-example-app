@@ -82,6 +82,12 @@
           and user_id = #{userId}
     </select>
 
+    <select id="articleFavoriteCount" resultType="java.lang.Integer">
+        select count(1)
+        from article_favorites
+        where article_id = #{articleId}
+    </select>
+
     <select id="findTag" resultType="com.example.realworld.domain.entity.TagEntity">
         select id, name
         from tags

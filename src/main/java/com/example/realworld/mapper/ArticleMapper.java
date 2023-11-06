@@ -28,4 +28,6 @@ public interface ArticleMapper {
     void removeArticleUserRelation(@Param("articleId") String articleId, @Param("userId") String userId);
 
     boolean isArticleFollowing(@Param("articleId") String articleId, @Param("userId") String userId);
+
+    int articleFavoriteCount(@Param("articleId") String articleId);
 }

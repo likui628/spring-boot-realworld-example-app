@@ -7,8 +7,8 @@ import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.mapper.TagMapper;
+import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.ArticleService;
-import com.example.realworld.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final TagMapper tagsMapper;
 
-    private final ProfileService profileService;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional
@@ -98,14 +98,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void removeArticleUserRelation(String article_id, String user_id) {
         boolean following = articleMapper.isArticleFollowing(article_id, user_id);
-        if (!following) {
+        if (following) {
             articleMapper.removeArticleUserRelation(article_id, user_id);
         }
     }
 
-    // TODO fill extra article info
     private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {
-        articleDto.setFavoritesCount(100);
-        articleDto.setFavorited(true);
+        articleDto.setFavoritesCount(articleMapper.articleFavoriteCount(articleDto.getId()));
+        articleDto.setFavorited(articleMapper.isArticleFollowing(articleDto.getId(), user.getId()));
+        articleDto.getProfileDto()
+                .setFollowing(
+                        userMapper.isUserFollowing(user.getId(), articleDto.getProfileDto().getId())
+                );
     }
 }

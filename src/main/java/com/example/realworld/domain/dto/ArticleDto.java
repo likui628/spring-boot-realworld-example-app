@@ -34,7 +34,7 @@ public class ArticleDto {
     private String body;
 
     private List<String> tagList;
-    
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -43,8 +43,7 @@ public class ArticleDto {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY)
     private ProfileDto profileDto;
 
-    private boolean favorited;
+    private Boolean favorited;
 
     private int favoritesCount;
-
 }
