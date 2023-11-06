@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.realworld.mapper.ArticleMapper">
-
+    <sql id="profileColumns">
+        U.id userId,
+        U.username userUsername,
+        U.bio userBio,
+        U.image userImage
+    </sql>
     <sql id="selectArticle">
-        select A.id          articleId,
-               A.slug        articleSlug,
-               A.title       articleTitle,
-               A.description articleDescription,
-               A.body        articleBody,
-               A.user_id     articleUserId,
-               A.created_at  articleCreatedAt,
-               A.updated_at  articleUpdatedAt,
-               T.id          tagId,
-               T.name        tagName
-        from articles A
-                 left join article_tags AT on A.id = AT.article_id
-                 left join tags T on T.id = AT.tag_id
+        select
+        A.id articleId,
+        A.slug articleSlug,
+        A.title articleTitle,
+        A.description articleDescription,
+        A.body articleBody,
+        A.created_at articleCreatedAt,
+        A.updated_at articleUpdatedAt,
+        T.name tagName,
+        <include refid="profileColumns"/>
+        from
+        articles A
+        left join article_tags AT on A.id = AT.article_id
+        left join tags T on T.id = AT.tag_id
+        left join users U on U.id = A.user_id
     </sql>
 
+    <resultMap id="ProfileDto" type="com.example.realworld.domain.dto.ProfileDto">
+        <id column="userId" property="id"/>
+        <result column="userUsername" property="username"/>
+        <result column="userBio" property="bio"/>
+        <result column="userImage" property="image"/>
+    </resultMap>
     <resultMap id="articleDto" type="com.example.realworld.domain.dto.ArticleDto">
         <id column="articleId" property="id"/>
         <result column="articleSlug" property="slug"/>
@@ -26,6 +39,7 @@
         <result column="articleBody" property="body"/>
         <result column="articleCreatedAt" property="createdAt"/>
         <result column="articleUpdatedAt" property="updatedAt"/>
+        <association property="profileDto" resultMap="ProfileDto"/>
         <collection property="tagList" javaType="list" ofType="string">
             <result column="tagName"/>
         </collection>
@@ -67,8 +81,6 @@
 
     <select id="findById" resultMap="articleDto">
         <include refid="selectArticle"/>
-        where id = #{id}
+        where A.id = #{id}
     </select>
-
-
 </mapper>

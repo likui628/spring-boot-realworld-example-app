@@ -8,6 +8,7 @@ import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.mapper.TagMapper;
 import com.example.realworld.service.ArticleService;
+import com.example.realworld.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleMapper articleMapper;
 
     private final TagMapper tagsMapper;
+
+    private final ProfileService profileService;
 
     @Override
     @Transactional
@@ -56,10 +59,12 @@ public class ArticleServiceImpl implements ArticleService {
         return Optional.ofNullable(articleMapper.findBySlug(slug));
     }
 
-    public Optional<ArticleDto> findById(String id, final UserEntity currentUser) {
+    public ArticleDto findById(String id, final UserEntity currentUser) {
         ArticleDto articleDto = articleMapper.findById(id);
-        //TODO fill extra info
-        return Optional.ofNullable(articleDto);
+        if (currentUser != null) {
+            fillExtraInfo(id, currentUser, articleDto);
+        }
+        return articleDto;
     }
 
     private ArticleDto convertEntityToDto(ArticleEntity articleEntity) {
@@ -80,5 +85,11 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleDto> articles = articleMapper.queryArticles(limit, offset);
 
         return articles;
+    }
+
+    // TODO fill extra article info
+    private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {
+        articleDto.setFavoritesCount(100);
+        articleDto.setFavorited(true);
     }
 }

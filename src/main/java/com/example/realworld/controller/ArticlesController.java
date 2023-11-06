@@ -25,7 +25,7 @@ public class ArticlesController {
     public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
                                         @AuthenticationPrincipal UserEntity currentUser) {
         ArticleEntity article = articleService.createArticle(createArticleParam, currentUser);
-        
+
         return ResponseEntity.ok(articleService.findById(article.getId(), currentUser));
     }
 

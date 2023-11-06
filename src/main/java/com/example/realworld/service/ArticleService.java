@@ -14,7 +14,7 @@ public interface ArticleService {
 
     Optional<ArticleDto> findBySlug(String slug);
 
-    Optional<ArticleDto> findById(String id, final UserEntity currentUser);
+    ArticleDto findById(String id, final UserEntity currentUser);
 
     List<ArticleDto> queryArticles(Integer limit, Integer offset);
 }
