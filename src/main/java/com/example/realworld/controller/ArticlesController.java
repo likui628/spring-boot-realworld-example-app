@@ -2,7 +2,9 @@ package com.example.realworld.controller;
 
 import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.entity.ArticleEntity;
+import com.example.realworld.domain.entity.CommentEntity;
 import com.example.realworld.domain.entity.UserEntity;
+import com.example.realworld.domain.model.CommentParam;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.service.ArticleService;
@@ -71,5 +73,23 @@ public class ArticlesController {
                 .orElseThrow(() -> new IllegalStateException("Exception"));
 
         return ResponseEntity.ok(articleDto);
+    }
+
+    @PostMapping("/{slug}/comments")
+    public ResponseEntity commentArticle(@PathVariable("slug") String slug,
+                                         @Valid @RequestBody CommentParam commentParam,
+                                         @AuthenticationPrincipal UserEntity user) {
+        ArticleDto articleDto = articleService.findBySlug(slug)
+                .orElseThrow(() -> new IllegalStateException("Exception"));
+
+        CommentEntity comment = CommentEntity
+                .builder()
+                .body(commentParam.getBody())
+                .articleId(articleDto.getId())
+                .userId(user.getId())
+                .build();
+        articleMapper.insertArticleComment(comment);
+
+        return ResponseEntity.ok(articleMapper.findArticleCommentById(comment.getId()));
     }
 }

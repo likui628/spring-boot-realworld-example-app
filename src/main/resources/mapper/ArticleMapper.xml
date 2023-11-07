@@ -24,6 +24,20 @@
         left join tags T on T.id = AT.tag_id
         left join users U on U.id = A.user_id
     </sql>
+    <sql id="selectComment">
+        select
+        C.id commentId,
+        C.body commentBody,
+        C.created_at commentCreatedAt,
+        C.updated_at commentUpdatedAt,
+        A.user_id userId,
+        A.id articleId,
+        <include refid="profileColumns"/>
+        from
+        comments C
+        left join users U on C.user_id = U.id
+        left join articles A on A.id = C.article_id
+    </sql>
 
     <resultMap id="ProfileDto" type="com.example.realworld.domain.dto.ProfileDto">
         <id column="userId" property="id"/>
@@ -43,6 +57,15 @@
         <collection property="tagList" javaType="list" ofType="string">
             <result column="tagName"/>
         </collection>
+    </resultMap>
+    <resultMap id="commentDto" type="com.example.realworld.domain.dto.CommentDto">
+        <id column="commentId" property="id"/>
+        <result column="commentBody" property="body"/>
+        <result column="userId" property="userId"/>
+        <result column="articleId" property="articleId"/>
+        <result column="commentCreatedAt" property="createdAt"/>
+        <result column="commentUpdatedAt" property="updatedAt"/>
+        <association property="profileDto" resultMap="ProfileDto"/>
     </resultMap>
 
     <insert id="insert">
@@ -73,6 +96,16 @@
         where user_id = #{userId}
           and article_id = #{articleId}
 
+    </insert>
+
+    <insert id="insertArticleComment">
+        insert into comments(id, body, article_id, user_id, created_at, updated_at)
+        values (#{comment.id},
+                #{comment.body},
+                #{comment.articleId},
+                #{comment.userId},
+                #{comment.createdAt},
+                #{comment.updatedAt})
     </insert>
 
     <select id="isArticleFollowing" resultType="java.lang.Boolean">
@@ -108,5 +141,9 @@
     <select id="findById" resultMap="articleDto">
         <include refid="selectArticle"/>
         where A.id = #{id}
+    </select>
+    <select id="findArticleCommentById" resultMap="commentDto">
+        <include refid="selectComment"/>
+        where C.id=#{commentId}
     </select>
 </mapper>
