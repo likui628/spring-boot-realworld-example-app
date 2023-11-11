@@ -58,7 +58,7 @@ public class ArticlesController {
                     articleService.insertArticleUserRelation(article.getId(), user.getId());
                     return articleService.findById(article.getId(), user);
                 })
-                .orElseThrow(() -> new IllegalStateException("Exception"));
+                .orElseThrow(ResourceNotFoundException::new);
 
         return ResponseEntity.ok(articleDto);
     }
@@ -71,7 +71,7 @@ public class ArticlesController {
                     articleService.removeArticleUserRelation(article.getId(), user.getId());
                     return articleService.findById(article.getId(), user);
                 })
-                .orElseThrow(() -> new IllegalStateException("Exception"));
+                .orElseThrow(ResourceNotFoundException::new);
 
         return ResponseEntity.ok(articleDto);
     }
@@ -80,18 +80,19 @@ public class ArticlesController {
     public ResponseEntity commentArticle(@PathVariable("slug") String slug,
                                          @Valid @RequestBody CommentParam commentParam,
                                          @AuthenticationPrincipal UserEntity user) {
-        ArticleDto articleDto = articleService.findBySlug(slug)
-                .orElseThrow(() -> new IllegalStateException("Exception"));
+        ArticleDto article = articleService
+                .findBySlug(slug)
+                .orElseThrow(ResourceNotFoundException::new);
 
         CommentEntity comment = CommentEntity
                 .builder()
                 .body(commentParam.getBody())
-                .articleId(articleDto.getId())
+                .articleId(article.getId())
                 .userId(user.getId())
                 .build();
         articleMapper.insertArticleComment(comment);
 
-        return ResponseEntity.ok(articleMapper.findArticleCommentById(articleDto.getId(), comment.getId()));
+        return ResponseEntity.ok(articleMapper.findArticleCommentById(article.getId(), comment.getId()));
     }
 
     @DeleteMapping("/{slug}/comments/{commentId}")
