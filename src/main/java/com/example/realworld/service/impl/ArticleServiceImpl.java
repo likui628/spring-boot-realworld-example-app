@@ -1,6 +1,7 @@
 package com.example.realworld.service.impl;
 
 import com.example.realworld.domain.dto.ArticleDto;
+import com.example.realworld.domain.dto.CommentDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.TagEntity;
 import com.example.realworld.domain.entity.UserEntity;
@@ -101,6 +102,11 @@ public class ArticleServiceImpl implements ArticleService {
         if (following) {
             articleMapper.removeArticleUserRelation(article_id, user_id);
         }
+    }
+
+    @Override
+    public Optional<CommentDto> findCommentById(String article_id, String comment_id) {
+        return Optional.ofNullable(articleMapper.findArticleCommentById(article_id, comment_id));
     }
 
     private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {

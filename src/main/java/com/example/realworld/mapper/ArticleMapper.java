@@ -35,5 +35,7 @@ public interface ArticleMapper {
 
     void insertArticleComment(@Param("comment") CommentEntity comment);
 
-    CommentDto findArticleCommentById(@Param("commentId") String commentId);
+    CommentDto findArticleCommentById(@Param("articleId") String articleId, @Param("commentId") String commentId);
+
+    void deleteArticleComment(@Param("commentId") String commentId);
 }

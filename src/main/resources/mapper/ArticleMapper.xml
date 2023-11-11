@@ -144,6 +144,12 @@
     </select>
     <select id="findArticleCommentById" resultMap="commentDto">
         <include refid="selectComment"/>
-        where C.id=#{commentId}
+        where C.id=#{commentId} and C.article_id=#{articleId}
     </select>
+
+    <delete id="deleteArticleComment">
+        delete
+        from comments
+        where id = #{commentId}
+    </delete>
 </mapper>
