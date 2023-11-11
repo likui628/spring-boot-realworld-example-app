@@ -140,6 +140,14 @@
 
     <select id="queryArticles" resultMap="articleDto">
         <include refid="selectArticle"/>
+        <where>
+            <if test="tag != null">
+                T.name=#{tag}
+            </if>
+            <if test="username != null">
+                and U.username=#{username}
+            </if>
+        </where>
         limit #{limit}
         offset #{offset}
     </select>

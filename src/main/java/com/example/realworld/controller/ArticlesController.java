@@ -37,9 +37,12 @@ public class ArticlesController {
     }
 
     @GetMapping
-    public ResponseEntity getArticles(@RequestParam(value = "offset", defaultValue = "0") int offset,
-                                      @RequestParam(value = "limit", defaultValue = "20") int limit) {
-        List<ArticleDto> articles = articleService.queryArticles(limit, offset);
+    public ResponseEntity getArticles(
+            @RequestParam(value = "author", required = false) String username,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
+            @RequestParam(value = "limit", defaultValue = "20", required = false) int limit) {
+        List<ArticleDto> articles = articleService.queryArticles(username, tag, limit, offset);
 
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {

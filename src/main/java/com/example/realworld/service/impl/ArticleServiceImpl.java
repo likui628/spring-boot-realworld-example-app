@@ -87,8 +87,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleDto> queryArticles(Integer limit, Integer offset) {
-        List<ArticleDto> articles = articleMapper.queryArticles(limit, offset);
+    public List<ArticleDto> queryArticles(String username, String tag, Integer limit, Integer offset) {
+        List<ArticleDto> articles = articleMapper.queryArticles(username, tag, limit, offset);
 
         return articles;
     }
