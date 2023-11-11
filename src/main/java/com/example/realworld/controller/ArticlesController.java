@@ -55,6 +55,14 @@ public class ArticlesController {
         );
     }
 
+    @GetMapping("/{slug}")
+    public ResponseEntity getSingleArticleBySlug(@PathVariable("slug") String slug) {
+        return articleService
+                .findBySlug(slug)
+                .map(article -> ResponseEntity.ok(article))
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
     @DeleteMapping("/{slug}")
     public ResponseEntity deleteArticle(@PathVariable("slug") String slug, @AuthenticationPrincipal UserEntity user) {
         return articleService
