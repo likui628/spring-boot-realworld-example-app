@@ -13,6 +13,8 @@ public interface ArticleService {
 
     ArticleEntity createArticle(final CreateArticleParam article, final UserEntity currentUser);
 
+    void deleteArticle(String id);
+
     Optional<ArticleDto> findBySlug(String slug);
 
     ArticleDto findById(String id, final UserEntity currentUser);

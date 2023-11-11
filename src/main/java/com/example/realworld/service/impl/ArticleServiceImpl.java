@@ -56,6 +56,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public void deleteArticle(String id) {
+        articleMapper.deleteArticle(id);
+    }
+
+    @Override
     public Optional<ArticleDto> findBySlug(String slug) {
         return Optional.ofNullable(articleMapper.findBySlug(slug));
     }

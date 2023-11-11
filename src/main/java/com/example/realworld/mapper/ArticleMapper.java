@@ -15,6 +15,8 @@ public interface ArticleMapper {
 
     void insert(@Param("article") ArticleEntity article);
 
+    void deleteArticle(@Param("id") String id);
+
     TagEntity findTag(@Param("name") String name);
 
     void insertArticleTagRelation(@Param("articleId") String articleId, @Param("tagId") String tagId);

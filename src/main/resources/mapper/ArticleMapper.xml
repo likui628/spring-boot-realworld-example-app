@@ -80,6 +80,12 @@
                 #{article.updatedAt})
     </insert>
 
+    <delete id="deleteArticle">
+        delete
+        from articles
+        where id = #{id}
+    </delete>
+
     <insert id="insertArticleTagRelation">
         insert into article_tags(article_id, tag_id)
         values (#{articleId}, #{tagId})

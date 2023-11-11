@@ -6,6 +6,7 @@ import com.example.realworld.domain.entity.CommentEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CommentParam;
 import com.example.realworld.domain.model.CreateArticleParam;
+import com.example.realworld.exception.NoAuthorizationException;
 import com.example.realworld.exception.ResourceNotFoundException;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.service.ArticleService;
@@ -48,6 +49,20 @@ public class ArticlesController {
                     }
                 }
         );
+    }
+
+    @DeleteMapping("/{slug}")
+    public ResponseEntity deleteArticle(@PathVariable("slug") String slug, @AuthenticationPrincipal UserEntity user) {
+        return articleService
+                .findBySlug(slug)
+                .map(article -> {
+                    if (!user.getId().equals(article.getProfileDto().getId())) {
+                        throw new NoAuthorizationException();
+                    }
+                    articleService.deleteArticle(article.getId());
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @PostMapping("/{slug}/favorite")
