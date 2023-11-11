@@ -22,8 +22,10 @@ public interface ArticleMapper {
     void insertArticleTagRelation(@Param("articleId") String articleId, @Param("tagId") String tagId);
 
     ArticleDto findBySlug(@Param("slug") String slug);
+    
+    List<String> queryArticleIds(@Param("username") String username, @Param("tag") String tag, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
-    List<ArticleDto> queryArticles(@Param("username") String username, @Param("tag") String tag, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<ArticleDto> findArticles(List<String> articleIds);
 
     ArticleDto findById(@Param("id") String id);
 

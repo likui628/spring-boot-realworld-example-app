@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,9 +89,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleDto> queryArticles(String username, String tag, Integer limit, Integer offset) {
-        List<ArticleDto> articles = articleMapper.queryArticles(username, tag, limit, offset);
-
-        return articles;
+        List<String> articleIds = articleMapper.queryArticleIds(username, tag, limit, offset);
+        if (articleIds.size() == 0) {
+            return new ArrayList<>();
+        } else {
+            List<ArticleDto> articles = articleMapper.findArticles(articleIds);
+            return articles;
+        }
     }
 
     @Override

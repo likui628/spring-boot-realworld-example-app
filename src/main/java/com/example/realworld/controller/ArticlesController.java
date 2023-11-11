@@ -42,7 +42,8 @@ public class ArticlesController {
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
             @RequestParam(value = "limit", defaultValue = "20", required = false) int limit) {
-        List<ArticleDto> articles = articleService.queryArticles(username, tag, limit, offset);
+        List<ArticleDto> articles = articleService
+                .queryArticles(username, tag, limit, offset);
 
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {

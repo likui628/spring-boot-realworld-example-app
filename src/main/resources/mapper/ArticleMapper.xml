@@ -24,6 +24,13 @@
         left join tags T on T.id = AT.tag_id
         left join users U on U.id = A.user_id
     </sql>
+    <sql id="selectArticleIds">
+        select A.id
+        from articles A
+                 left join article_tags AT on A.id = AT.article_id
+                 left join tags T on T.id = AT.tag_id
+                 left join users U on U.id = A.user_id
+    </sql>
     <sql id="selectComment">
         select
         C.id commentId,
@@ -137,9 +144,20 @@
         <include refid="selectArticle"/>
         where slug = #{slug}
     </select>
-
-    <select id="queryArticles" resultMap="articleDto">
+    
+    <select id="findArticles" resultMap="articleDto">
         <include refid="selectArticle"/>
+        <where>
+            <foreach item="id" index="index" collection="articleIds"
+                     open="A.id in (" separator="," close=")" nullable="true">
+                #{id}
+            </foreach>
+        </where>
+        order by A.created_at desc
+    </select>
+
+    <select id="queryArticleIds" resultType="java.lang.String">
+        <include refid="selectArticleIds"/>
         <where>
             <if test="tag != null">
                 T.name=#{tag}
