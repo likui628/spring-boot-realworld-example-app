@@ -29,15 +29,15 @@ public class ArticlesController {
     private final ArticleMapper articleMapper;
 
     @PostMapping
-    public ResponseEntity createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
-                                        @AuthenticationPrincipal UserEntity currentUser) {
+    public ResponseEntity<?> createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
+                                           @AuthenticationPrincipal UserEntity currentUser) {
         ArticleEntity article = articleService.createArticle(createArticleParam, currentUser);
 
         return ResponseEntity.ok(articleService.findById(article.getId(), currentUser));
     }
 
     @GetMapping
-    public ResponseEntity getArticles(
+    public ResponseEntity<?> getArticles(
             @RequestParam(value = "author", required = false) String username,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
@@ -56,15 +56,15 @@ public class ArticlesController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity getSingleArticleBySlug(@PathVariable("slug") String slug) {
+    public ResponseEntity<?> getSingleArticleBySlug(@PathVariable("slug") String slug) {
         return articleService
                 .findBySlug(slug)
-                .map(article -> ResponseEntity.ok(article))
+                .map(ResponseEntity::ok)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping("/{slug}")
-    public ResponseEntity deleteArticle(@PathVariable("slug") String slug, @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> deleteArticle(@PathVariable("slug") String slug, @AuthenticationPrincipal UserEntity user) {
         return articleService
                 .findBySlug(slug)
                 .map(article -> {
@@ -78,8 +78,8 @@ public class ArticlesController {
     }
 
     @PostMapping("/{slug}/favorite")
-    public ResponseEntity favoriteArticle(@PathVariable("slug") String slug,
-                                          @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> favoriteArticle(@PathVariable("slug") String slug,
+                                             @AuthenticationPrincipal UserEntity user) {
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.insertArticleUserRelation(article.getId(), user.getId());
@@ -91,8 +91,8 @@ public class ArticlesController {
     }
 
     @DeleteMapping("/{slug}/favorite")
-    public ResponseEntity unfavoriteArticle(@PathVariable("slug") String slug,
-                                            @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> unfavoriteArticle(@PathVariable("slug") String slug,
+                                               @AuthenticationPrincipal UserEntity user) {
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.removeArticleUserRelation(article.getId(), user.getId());
@@ -104,9 +104,9 @@ public class ArticlesController {
     }
 
     @PostMapping("/{slug}/comments")
-    public ResponseEntity commentArticle(@PathVariable("slug") String slug,
-                                         @Valid @RequestBody CommentParam commentParam,
-                                         @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> commentArticle(@PathVariable("slug") String slug,
+                                            @Valid @RequestBody CommentParam commentParam,
+                                            @AuthenticationPrincipal UserEntity user) {
         ArticleDto article = articleService
                 .findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -123,8 +123,8 @@ public class ArticlesController {
     }
 
     @DeleteMapping("/{slug}/comments/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable("slug") String slug,
-                                        @PathVariable("commentId") String commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable("slug") String slug,
+                                           @PathVariable("commentId") String commentId) {
         ArticleDto article = articleService
                 .findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);

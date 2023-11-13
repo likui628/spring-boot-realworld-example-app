@@ -25,14 +25,14 @@ public class UsersController {
     private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity createUser(@Valid @RequestBody RegisterParam registerParam) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody RegisterParam registerParam) {
         UserEntity user = userService.createUser(registerParam);
         UserEntity userData = userService.findById(user.getId()).get();
         return ResponseEntity.ok(new UserDto(userData, jwtService.toToken(userData)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody LoginParam loginParam) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginParam loginParam) {
         UserEntity userData = userService.login(loginParam);
         return ResponseEntity.ok(new UserDto(userData, jwtService.toToken(userData)));
     }

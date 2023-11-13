@@ -19,14 +19,14 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity currentUser(
+    public ResponseEntity<?> currentUser(
             @AuthenticationPrincipal UserEntity user,
             @RequestHeader(value = "Authorization") String authorization) {
         return ResponseEntity.ok(new UserDto(user, authorization.split(" ")[1]));
     }
 
     @PutMapping
-    public ResponseEntity updateUser(
+    public ResponseEntity<?> updateUser(
             @AuthenticationPrincipal UserEntity user,
             @RequestHeader(value = "Authorization") String authorization,
             @Valid @RequestBody UpdateUserParam updateParam

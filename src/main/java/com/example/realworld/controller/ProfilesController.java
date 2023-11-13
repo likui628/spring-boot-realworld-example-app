@@ -15,20 +15,20 @@ public class ProfilesController {
     private final ProfileService profileService;
 
     @GetMapping
-    public ResponseEntity getProfiles(@PathVariable("username") String username,
-                                      @AuthenticationPrincipal UserEntity currentUser) {
+    public ResponseEntity<?> getProfiles(@PathVariable("username") String username,
+                                         @AuthenticationPrincipal UserEntity currentUser) {
         return ResponseEntity.ok(profileService.findByUsername(username, currentUser));
     }
 
     @PostMapping("/follow")
-    public ResponseEntity followProfiles(@PathVariable("username") String username,
-                                         @AuthenticationPrincipal UserEntity currentUser) {
+    public ResponseEntity<?> followProfiles(@PathVariable("username") String username,
+                                            @AuthenticationPrincipal UserEntity currentUser) {
         return ResponseEntity.ok(profileService.followByUsername(username, currentUser));
     }
 
     @DeleteMapping("/follow")
-    public ResponseEntity deleteProfiles(@PathVariable("username") String username,
-                                         @AuthenticationPrincipal UserEntity currentUser) {
+    public ResponseEntity<?> deleteProfiles(@PathVariable("username") String username,
+                                            @AuthenticationPrincipal UserEntity currentUser) {
         return ResponseEntity.ok(profileService.unfollowByUsername(username, currentUser));
     }
 }

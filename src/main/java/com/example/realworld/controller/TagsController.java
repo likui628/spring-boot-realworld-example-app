@@ -17,7 +17,7 @@ public class TagsController {
     private final TagService tagService;
 
     @GetMapping
-    public ResponseEntity getTags() {
+    public ResponseEntity<?> getTags() {
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {
                     {
