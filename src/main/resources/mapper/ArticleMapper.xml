@@ -25,11 +25,13 @@
         left join users U on U.id = A.user_id
     </sql>
     <sql id="selectArticleIds">
-        select A.id
+        select distinct (A.id)
         from articles A
                  left join article_tags AT on A.id = AT.article_id
                  left join tags T on T.id = AT.tag_id
-                 left join users U on U.id = A.user_id
+                 left join article_favorites AF on A.id = AF.article_id
+                 left join users AU on AU.id = A.user_id
+                 left join users AFU on AFU.id = AF.user_id
     </sql>
 
     <insert id="insert">
@@ -109,8 +111,11 @@
             <if test="tag != null">
                 T.name=#{tag}
             </if>
-            <if test="username != null">
-                and U.username=#{username}
+            <if test="author != null">
+                and AU.username=#{author}
+            </if>
+            <if test="favoritedBy != null">
+                and AFU.username=#{favoritedBy}
             </if>
         </where>
         limit #{limit}

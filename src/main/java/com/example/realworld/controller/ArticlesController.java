@@ -36,12 +36,13 @@ public class ArticlesController {
 
     @GetMapping
     public ResponseEntity<?> getArticles(
-            @RequestParam(value = "author", required = false) String username,
+            @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "favorited", required = false) String favoritedBy,
             @RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
             @RequestParam(value = "limit", defaultValue = "20", required = false) int limit) {
         List<ArticleDto> articles = articleService
-                .queryArticles(username, tag, limit, offset);
+                .queryArticles(author, favoritedBy, tag, limit, offset);
 
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {
@@ -100,5 +101,5 @@ public class ArticlesController {
 
         return ResponseEntity.ok(articleDto);
     }
-    
+
 }

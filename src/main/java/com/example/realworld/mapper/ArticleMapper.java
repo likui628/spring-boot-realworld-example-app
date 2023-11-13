@@ -21,7 +21,7 @@ public interface ArticleMapper {
 
     ArticleDto findBySlug(@Param("slug") String slug);
 
-    List<String> queryArticleIds(@Param("username") String username, @Param("tag") String tag, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<String> queryArticleIds(@Param("author") String author, @Param("favoritedBy") String favoritedBy, @Param("tag") String tag, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     List<ArticleDto> findArticles(List<String> articleIds);
 

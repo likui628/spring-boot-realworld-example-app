@@ -91,13 +91,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleDto> queryArticles(String username, String tag, Integer limit, Integer offset) {
-        List<String> articleIds = articleMapper.queryArticleIds(username, tag, limit, offset);
-        if (articleIds.size() == 0) {
+    public List<ArticleDto> queryArticles(String author, String favoritedBy, String tag, Integer limit, Integer offset) {
+        List<String> articleIds = articleMapper.queryArticleIds(author, favoritedBy, tag, limit, offset);
+        if (articleIds.isEmpty()) {
             return new ArrayList<>();
         } else {
-            List<ArticleDto> articles = articleMapper.findArticles(articleIds);
-            return articles;
+            return articleMapper.findArticles(articleIds);
         }
     }
 
