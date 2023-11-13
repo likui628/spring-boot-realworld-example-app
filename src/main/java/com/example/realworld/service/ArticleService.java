@@ -21,6 +21,8 @@ public interface ArticleService {
 
     List<ArticleDto> queryArticles(String author, String favoritedBy, String tag, Integer limit, Integer offset);
 
+    List<ArticleDto> queryArticlesFeed(String userId, Integer limit, Integer offset);
+
     void insertArticleUserRelation(String article_id, String user_id);
 
     void removeArticleUserRelation(String article_id, String user_id);

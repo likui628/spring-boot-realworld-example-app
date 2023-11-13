@@ -10,11 +10,10 @@
                 #{user.bio},
                 #{user.image})
     </insert>
-    <select id="findFollows" resultType="com.example.realworld.domain.entity.FollowEntity">
-        select user_id, follow_id
+    <select id="findFollows" resultType="java.lang.String">
+        select follow_id
         from follows
         where user_id = #{userId}
-          and follow_id = #{followId}
     </select>
     <insert id="insertFollows">
         insert into follows(user_id, follow_id)

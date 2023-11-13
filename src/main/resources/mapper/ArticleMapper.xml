@@ -105,6 +105,17 @@
         order by A.created_at desc
     </select>
 
+    <select id="findArticlesByAuthors" resultMap="transfer.data.articleDto">
+        <include refid="selectArticle"/>
+        <where>
+            <foreach item="id" index="index" collection="userIds"
+                     open="A.user_id in (" separator="," close=")" nullable="true">
+                #{id}
+            </foreach>
+        </where>
+        order by A.created_at desc
+    </select>
+
     <select id="queryArticleIds" resultType="java.lang.String">
         <include refid="selectArticleIds"/>
         <where>

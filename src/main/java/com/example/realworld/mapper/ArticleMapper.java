@@ -25,6 +25,8 @@ public interface ArticleMapper {
 
     List<ArticleDto> findArticles(List<String> articleIds);
 
+    List<ArticleDto> findArticlesByAuthors(List<String> userIds, Integer limit, Integer offset);
+
     ArticleDto findById(@Param("id") String id);
 
     void insertArticleUserRelation(@Param("articleId") String articleId, @Param("userId") String userId);

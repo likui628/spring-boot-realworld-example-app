@@ -95,9 +95,17 @@ public class ArticleServiceImpl implements ArticleService {
         List<String> articleIds = articleMapper.queryArticleIds(author, favoritedBy, tag, limit, offset);
         if (articleIds.isEmpty()) {
             return new ArrayList<>();
-        } else {
-            return articleMapper.findArticles(articleIds);
         }
+        return articleMapper.findArticles(articleIds);
+    }
+
+    @Override
+    public List<ArticleDto> queryArticlesFeed(String userId, Integer limit, Integer offset) {
+        List<String> follows = userMapper.findFollows(userId);
+        if (follows.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return articleMapper.findArticlesByAuthors(follows, limit, offset);
     }
 
     @Override

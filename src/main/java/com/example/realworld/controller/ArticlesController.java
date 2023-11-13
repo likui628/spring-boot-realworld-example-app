@@ -6,7 +6,6 @@ import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.exception.NoAuthorizationException;
 import com.example.realworld.exception.ResourceNotFoundException;
-import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,6 @@ import java.util.List;
 public class ArticlesController {
 
     private final ArticleService articleService;
-
-    private final ArticleMapper articleMapper;
 
     @PostMapping
     public ResponseEntity<?> createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
@@ -44,6 +41,21 @@ public class ArticlesController {
         List<ArticleDto> articles = articleService
                 .queryArticles(author, favoritedBy, tag, limit, offset);
 
+        return ResponseEntity.ok(
+                new HashMap<String, Object>() {
+                    {
+                        put("articles", articles);
+                        put("articlesCount", articles.size());
+                    }
+                }
+        );
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<?> getArticlesFeed(@RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
+                                             @RequestParam(value = "limit", defaultValue = "20", required = false) int limit,
+                                             @AuthenticationPrincipal UserEntity user) {
+        List<ArticleDto> articles = articleService.queryArticlesFeed(user.getId(), offset, limit);
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {
                     {
