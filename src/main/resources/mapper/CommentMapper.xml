@@ -17,6 +17,27 @@
         left join articles A on A.id = C.article_id
     </sql>
 
+    <insert id="insertArticleComment">
+        insert into comments(id, body, article_id, user_id, created_at, updated_at)
+        values (#{comment.id},
+                #{comment.body},
+                #{comment.articleId},
+                #{comment.userId},
+                #{comment.createdAt},
+                #{comment.updatedAt})
+    </insert>
+    
+    <select id="findArticleCommentById" resultMap="transfer.data.commentDto">
+        <include refid="selectComment"/>
+        where C.id=#{commentId} and C.article_id=#{articleId}
+    </select>
+
+    <delete id="deleteArticleComment">
+        delete
+        from comments
+        where id = #{commentId}
+    </delete>
+
     <select id="queryComments" resultMap="transfer.data.commentDto">
         <include refid="selectComment"/>
         where C.article_id=#{articleId}

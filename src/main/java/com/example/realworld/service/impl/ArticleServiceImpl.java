@@ -7,6 +7,7 @@ import com.example.realworld.domain.entity.TagEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
+import com.example.realworld.mapper.CommentMapper;
 import com.example.realworld.mapper.TagMapper;
 import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.ArticleService;
@@ -28,6 +29,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final TagMapper tagsMapper;
 
     private final UserMapper userMapper;
+
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -116,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Optional<CommentDto> findCommentById(String article_id, String comment_id) {
-        return Optional.ofNullable(articleMapper.findArticleCommentById(article_id, comment_id));
+        return Optional.ofNullable(commentMapper.findArticleCommentById(article_id, comment_id));
     }
 
     private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {

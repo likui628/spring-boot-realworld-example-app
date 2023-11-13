@@ -31,49 +31,6 @@
                  left join tags T on T.id = AT.tag_id
                  left join users U on U.id = A.user_id
     </sql>
-    <sql id="selectComment">
-        select
-        C.id commentId,
-        C.body commentBody,
-        C.created_at commentCreatedAt,
-        C.updated_at commentUpdatedAt,
-        A.user_id userId,
-        A.id articleId,
-        <include refid="profileColumns"/>
-        from
-        comments C
-        left join users U on C.user_id = U.id
-        left join articles A on A.id = C.article_id
-    </sql>
-
-    <resultMap id="ProfileDto" type="com.example.realworld.domain.dto.ProfileDto">
-        <id column="userId" property="id"/>
-        <result column="userUsername" property="username"/>
-        <result column="userBio" property="bio"/>
-        <result column="userImage" property="image"/>
-    </resultMap>
-    <resultMap id="articleDto" type="com.example.realworld.domain.dto.ArticleDto">
-        <id column="articleId" property="id"/>
-        <result column="articleSlug" property="slug"/>
-        <result column="articleTitle" property="title"/>
-        <result column="articleDescription" property="description"/>
-        <result column="articleBody" property="body"/>
-        <result column="articleCreatedAt" property="createdAt"/>
-        <result column="articleUpdatedAt" property="updatedAt"/>
-        <association property="profileDto" resultMap="ProfileDto"/>
-        <collection property="tagList" javaType="list" ofType="string">
-            <result column="tagName"/>
-        </collection>
-    </resultMap>
-    <resultMap id="commentDto" type="com.example.realworld.domain.dto.CommentDto">
-        <id column="commentId" property="id"/>
-        <result column="commentBody" property="body"/>
-        <result column="userId" property="userId"/>
-        <result column="articleId" property="articleId"/>
-        <result column="commentCreatedAt" property="createdAt"/>
-        <result column="commentUpdatedAt" property="updatedAt"/>
-        <association property="profileDto" resultMap="ProfileDto"/>
-    </resultMap>
 
     <insert id="insert">
         insert into articles(id, slug, title, description, body, user_id, created_at, updated_at)
@@ -111,16 +68,6 @@
 
     </insert>
 
-    <insert id="insertArticleComment">
-        insert into comments(id, body, article_id, user_id, created_at, updated_at)
-        values (#{comment.id},
-                #{comment.body},
-                #{comment.articleId},
-                #{comment.userId},
-                #{comment.createdAt},
-                #{comment.updatedAt})
-    </insert>
-
     <select id="isArticleFollowing" resultType="java.lang.Boolean">
         select count(1)
         from article_favorites
@@ -140,12 +87,12 @@
         where name = #{name}
     </select>
 
-    <select id="findBySlug" resultMap="articleDto">
+    <select id="findBySlug" resultMap="transfer.data.articleDto">
         <include refid="selectArticle"/>
         where slug = #{slug}
     </select>
-    
-    <select id="findArticles" resultMap="articleDto">
+
+    <select id="findArticles" resultMap="transfer.data.articleDto">
         <include refid="selectArticle"/>
         <where>
             <foreach item="id" index="index" collection="articleIds"
@@ -170,18 +117,9 @@
         offset #{offset}
     </select>
 
-    <select id="findById" resultMap="articleDto">
+    <select id="findById" resultMap="transfer.data.articleDto">
         <include refid="selectArticle"/>
         where A.id = #{id}
     </select>
-    <select id="findArticleCommentById" resultMap="commentDto">
-        <include refid="selectComment"/>
-        where C.id=#{commentId} and C.article_id=#{articleId}
-    </select>
 
-    <delete id="deleteArticleComment">
-        delete
-        from comments
-        where id = #{commentId}
-    </delete>
 </mapper>

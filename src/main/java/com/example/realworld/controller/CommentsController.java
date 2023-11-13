@@ -6,7 +6,7 @@ import com.example.realworld.domain.entity.CommentEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CommentParam;
 import com.example.realworld.exception.ResourceNotFoundException;
-import com.example.realworld.mapper.ArticleMapper;
+import com.example.realworld.mapper.CommentMapper;
 import com.example.realworld.service.ArticleService;
 import com.example.realworld.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,8 @@ import java.util.List;
 public class CommentsController {
 
     private final ArticleService articleService;
-
-    private final ArticleMapper articleMapper;
+    
+    private final CommentMapper commentMapper;
 
     private final CommentService commentService;
 
@@ -43,9 +43,9 @@ public class CommentsController {
                 .articleId(article.getId())
                 .userId(user.getId())
                 .build();
-        articleMapper.insertArticleComment(comment);
+        commentMapper.insertArticleComment(comment);
 
-        return ResponseEntity.ok(articleMapper.findArticleCommentById(article.getId(), comment.getId()));
+        return ResponseEntity.ok(commentMapper.findArticleCommentById(article.getId(), comment.getId()));
     }
 
     @GetMapping("")
@@ -73,7 +73,7 @@ public class CommentsController {
         return articleService
                 .findCommentById(article.getId(), commentId)
                 .map(comment -> {
-                    articleMapper.deleteArticleComment(comment.getId());
+                    commentMapper.deleteArticleComment(comment.getId());
                     return ResponseEntity.noContent().build();
                 })
                 .orElseThrow(ResourceNotFoundException::new);
