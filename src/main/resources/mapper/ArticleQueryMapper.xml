@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.realworld.mapper.ArticleQueryMapper">
+
     <sql id="profileColumns">
         U.id userId,
         U.username userUsername,
         U.bio userBio,
         U.image userImage
     </sql>
+
     <sql id="selectArticle">
         select
         A.id articleId,
@@ -24,6 +26,7 @@
         left join tags T on T.id = AT.tag_id
         left join users U on U.id = A.user_id
     </sql>
+    
     <sql id="selectArticleIds">
         select distinct (A.id)
         from articles A
@@ -33,10 +36,54 @@
                  left join users AU on AU.id = A.user_id
                  left join users AFU on AFU.id = AF.user_id
     </sql>
-    
+
     <select id="findBySlug" resultMap="transfer.data.articleDto">
         <include refid="selectArticle"/>
         where slug = #{slug}
+    </select>
+
+    <select id="findArticles" resultMap="transfer.data.articleDto">
+        <include refid="selectArticle"/>
+        <where>
+            <foreach item="id" index="index" collection="articleIds"
+                     open="A.id in (" separator="," close=")" nullable="true">
+                #{id}
+            </foreach>
+        </where>
+        order by A.created_at desc
+    </select>
+
+    <select id="findArticlesByAuthors" resultMap="transfer.data.articleDto">
+        <include refid="selectArticle"/>
+        <where>
+            <foreach item="id" index="index" collection="userIds"
+                     open="A.user_id in (" separator="," close=")" nullable="true">
+                #{id}
+            </foreach>
+        </where>
+        order by A.created_at desc
+    </select>
+
+    <select id="queryArticleIds" resultType="java.lang.String">
+        <include refid="selectArticleIds"/>
+        <where>
+            <if test="tag != null">
+                T.name=#{tag}
+            </if>
+            <if test="author != null">
+                and AU.username=#{author}
+            </if>
+            <if test="favoritedBy != null">
+                and AFU.username=#{favoritedBy}
+            </if>
+        </where>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+    <select id="findById" resultMap="transfer.data.articleDto">
+        <include refid="selectArticle"/>
+        where A.id = #{id}
     </select>
 
 </mapper>

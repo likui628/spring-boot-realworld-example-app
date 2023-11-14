@@ -32,7 +32,7 @@ public class ArticlesController {
                                            @AuthenticationPrincipal UserEntity currentUser) {
         ArticleEntity article = articleService.createArticle(createArticleParam, currentUser);
 
-        return ResponseEntity.ok(articleService.findById(article.getId(), currentUser));
+        return ResponseEntity.ok(articleQueryService.findById(article.getId(), currentUser));
     }
 
     @GetMapping
@@ -42,7 +42,7 @@ public class ArticlesController {
             @RequestParam(value = "favorited", required = false) String favoritedBy,
             @RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
             @RequestParam(value = "limit", defaultValue = "20", required = false) int limit) {
-        List<ArticleDto> articles = articleService
+        List<ArticleDto> articles = articleQueryService
                 .queryArticles(author, favoritedBy, tag, limit, offset);
 
         return ResponseEntity.ok(
@@ -59,7 +59,7 @@ public class ArticlesController {
     public ResponseEntity<?> getArticlesFeed(@RequestParam(value = "offset", defaultValue = "0", required = false) int offset,
                                              @RequestParam(value = "limit", defaultValue = "20", required = false) int limit,
                                              @AuthenticationPrincipal UserEntity user) {
-        List<ArticleDto> articles = articleService.queryArticlesFeed(user.getId(), offset, limit);
+        List<ArticleDto> articles = articleQueryService.queryArticlesFeed(user.getId(), offset, limit);
         return ResponseEntity.ok(
                 new HashMap<String, Object>() {
                     {
@@ -82,20 +82,10 @@ public class ArticlesController {
     public ResponseEntity<?> updateArticle(@PathVariable("slug") String slug,
                                            @Valid @RequestBody UpdateArticleParam updateArticleParam,
                                            @AuthenticationPrincipal UserEntity user) {
-        /**
-         * todo
-         * 根据slug判断article是否存在
-         * 判断是否有权限修改
-         * 仅修改不为空的部分
-         * 返回最新结果
-         */
-        // todo articleService里创建发挥ArticleEntity的函数
-        // todo Article里创建一个update的函数
-        // todo mybatis里set需要判断是否为空
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.updateArticle(article, updateArticleParam);
-                    return articleService.findById(article.getId(), user);
+                    return articleQueryService.findById(article.getId(), user);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
 
@@ -122,7 +112,7 @@ public class ArticlesController {
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.insertArticleUserRelation(article.getId(), user.getId());
-                    return articleService.findById(article.getId(), user);
+                    return articleQueryService.findById(article.getId(), user);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
 
@@ -135,7 +125,7 @@ public class ArticlesController {
         ArticleDto articleDto = articleService.findBySlug(slug)
                 .map(article -> {
                     articleService.removeArticleUserRelation(article.getId(), user.getId());
-                    return articleService.findById(article.getId(), user);
+                    return articleQueryService.findById(article.getId(), user);
                 })
                 .orElseThrow(ResourceNotFoundException::new);
 

@@ -1,6 +1,5 @@
 package com.example.realworld.service.impl;
 
-import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.dto.CommentDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.TagEntity;
@@ -10,16 +9,12 @@ import com.example.realworld.domain.model.UpdateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.mapper.CommentMapper;
 import com.example.realworld.mapper.TagMapper;
-import com.example.realworld.mapper.UserMapper;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +23,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleMapper articleMapper;
 
     private final TagMapper tagsMapper;
-
-    private final UserMapper userMapper;
-
+    
     private final CommentMapper commentMapper;
 
     @Override
@@ -76,44 +69,6 @@ public class ArticleServiceImpl implements ArticleService {
         return Optional.ofNullable(articleMapper.findBySlug(slug));
     }
 
-    public ArticleDto findById(String id, final UserEntity currentUser) {
-        ArticleDto articleDto = articleMapper.findById(id);
-        if (currentUser != null) {
-            fillExtraInfo(id, currentUser, articleDto);
-        }
-        return articleDto;
-    }
-
-    private ArticleDto convertEntityToDto(ArticleEntity articleEntity) {
-        return ArticleDto.builder()
-                .body(articleEntity.getBody())
-                .slug(articleEntity.getSlug())
-                .tagList(articleEntity.getTags()
-                        .stream().map(tagEntity -> tagEntity.getName()).collect(Collectors.toList()))
-                .title(articleEntity.getTitle())
-                .description(articleEntity.getDescription())
-                .createdAt(articleEntity.getCreatedAt())
-                .updatedAt(articleEntity.getUpdatedAt())
-                .build();
-    }
-
-    @Override
-    public List<ArticleDto> queryArticles(String author, String favoritedBy, String tag, Integer limit, Integer offset) {
-        List<String> articleIds = articleMapper.queryArticleIds(author, favoritedBy, tag, limit, offset);
-        if (articleIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return articleMapper.findArticles(articleIds);
-    }
-
-    @Override
-    public List<ArticleDto> queryArticlesFeed(String userId, Integer limit, Integer offset) {
-        List<String> follows = userMapper.findFollows(userId);
-        if (follows.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return articleMapper.findArticlesByAuthors(follows, limit, offset);
-    }
 
     @Override
     public void insertArticleUserRelation(String article_id, String user_id) {
@@ -134,14 +89,5 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Optional<CommentDto> findCommentById(String article_id, String comment_id) {
         return Optional.ofNullable(commentMapper.findArticleCommentById(article_id, comment_id));
-    }
-
-    private void fillExtraInfo(String id, UserEntity user, ArticleDto articleDto) {
-        articleDto.setFavoritesCount(articleMapper.articleFavoriteCount(articleDto.getId()));
-        articleDto.setFavorited(articleMapper.isArticleFollowing(articleDto.getId(), user.getId()));
-        articleDto.getProfileDto()
-                .setFollowing(
-                        userMapper.isUserFollowing(user.getId(), articleDto.getProfileDto().getId())
-                );
     }
 }

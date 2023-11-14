@@ -10,7 +10,7 @@
         C.updated_at commentUpdatedAt,
         A.user_id userId,
         A.id articleId,
-        <include refid="com.example.realworld.mapper.ArticleMapper.profileColumns"/>
+        <include refid="com.example.realworld.mapper.ArticleQueryMapper.profileColumns"/>
         from
         comments C
         left join users U on C.user_id = U.id
@@ -26,7 +26,7 @@
                 #{comment.createdAt},
                 #{comment.updatedAt})
     </insert>
-    
+
     <select id="findArticleCommentById" resultMap="transfer.data.commentDto">
         <include refid="selectComment"/>
         where C.id=#{commentId} and C.article_id=#{articleId}
