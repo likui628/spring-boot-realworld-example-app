@@ -18,7 +18,7 @@
         <result column="commentUpdatedAt" property="updatedAt"/>
         <association property="profileDto" resultMap="ProfileDto"/>
     </resultMap>
-    
+
     <resultMap id="articleDto" type="com.example.realworld.domain.dto.ArticleDto">
         <id column="articleId" property="id"/>
         <result column="articleSlug" property="slug"/>
@@ -29,6 +29,19 @@
         <result column="articleUpdatedAt" property="updatedAt"/>
         <association property="profileDto" resultMap="ProfileDto"/>
         <collection property="tagList" javaType="list" ofType="string">
+            <result column="tagName"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="articleEntity" type="com.example.realworld.domain.entity.ArticleEntity">
+        <id column="articleId" property="id"/>
+        <result column="articleSlug" property="slug"/>
+        <result column="articleTitle" property="title"/>
+        <result column="articleDescription" property="description"/>
+        <result column="articleBody" property="body"/>
+        <result column="articleCreatedAt" property="createdAt"/>
+        <result column="articleUpdatedAt" property="updatedAt"/>
+        <collection property="tags" javaType="list" ofType="string">
             <result column="tagName"/>
         </collection>
     </resultMap>

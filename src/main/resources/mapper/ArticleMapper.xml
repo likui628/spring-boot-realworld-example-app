@@ -24,6 +24,19 @@
         left join tags T on T.id = AT.tag_id
         left join users U on U.id = A.user_id
     </sql>
+    <sql id="selectArticleEntity">
+        select A.id          articleId,
+               A.slug        articleSlug,
+               A.title       articleTitle,
+               A.description articleDescription,
+               A.body        articleBody,
+               A.created_at  articleCreatedAt,
+               A.updated_at  articleUpdatedAt,
+               T.name        tagName
+        from articles A
+                 left join article_tags AT on A.id = AT.article_id
+                 left join tags T on T.id = AT.tag_id
+    </sql>
     <sql id="selectArticleIds">
         select distinct (A.id)
         from articles A
@@ -45,6 +58,23 @@
                 #{article.createdAt},
                 #{article.updatedAt})
     </insert>
+
+    <update id="update">
+        update articles
+        <set>
+            <if test="article.slug!=''">
+                slug= #{article.slug},
+            </if>
+            <if test="article.title!=''">
+                title= #{article.title},
+            </if>
+            <if test="article.body!=''">
+                body=#{article.body},
+            </if>
+            updated_at=#{article.updatedAt}
+        </set>
+        where id = #{article.id}
+    </update>
 
     <delete id="deleteArticle">
         delete
@@ -89,8 +119,8 @@
         where name = #{name}
     </select>
 
-    <select id="findBySlug" resultMap="transfer.data.articleDto">
-        <include refid="selectArticle"/>
+    <select id="findBySlug" resultMap="transfer.data.articleEntity">
+        <include refid="selectArticleEntity"/>
         where slug = #{slug}
     </select>
 

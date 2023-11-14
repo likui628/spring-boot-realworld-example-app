@@ -5,6 +5,7 @@ import com.example.realworld.domain.dto.CommentDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
+import com.example.realworld.domain.model.UpdateArticleParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,11 @@ public interface ArticleService {
 
     ArticleEntity createArticle(final CreateArticleParam article, final UserEntity currentUser);
 
+    void updateArticle(ArticleEntity article, final UpdateArticleParam updateArticle);
+
     void deleteArticle(String id);
 
-    Optional<ArticleDto> findBySlug(String slug);
+    Optional<ArticleEntity> findBySlug(String slug);
 
     ArticleDto findById(String id, final UserEntity currentUser);
 

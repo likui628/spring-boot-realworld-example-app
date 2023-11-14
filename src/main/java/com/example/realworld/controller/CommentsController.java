@@ -7,6 +7,7 @@ import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CommentParam;
 import com.example.realworld.exception.ResourceNotFoundException;
 import com.example.realworld.mapper.CommentMapper;
+import com.example.realworld.service.ArticleQueryService;
 import com.example.realworld.service.ArticleService;
 import com.example.realworld.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,9 @@ import java.util.List;
 public class CommentsController {
 
     private final ArticleService articleService;
-    
+
+    private final ArticleQueryService articleQueryService;
+
     private final CommentMapper commentMapper;
 
     private final CommentService commentService;
@@ -33,7 +36,7 @@ public class CommentsController {
     public ResponseEntity<?> commentArticle(@PathVariable("slug") String slug,
                                             @Valid @RequestBody CommentParam commentParam,
                                             @AuthenticationPrincipal UserEntity user) {
-        ArticleDto article = articleService
+        ArticleDto article = articleQueryService
                 .findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
 
@@ -50,7 +53,7 @@ public class CommentsController {
 
     @GetMapping("")
     public ResponseEntity<?> getArticleComments(@PathVariable("slug") String slug) {
-        ArticleDto articleDto = articleService
+        ArticleDto articleDto = articleQueryService
                 .findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
 
@@ -66,7 +69,8 @@ public class CommentsController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("slug") String slug,
                                            @PathVariable("commentId") String commentId) {
-        ArticleDto article = articleService
+        ArticleDto article = articleQueryService
+                
                 .findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
 

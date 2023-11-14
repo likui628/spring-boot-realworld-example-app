@@ -4,8 +4,10 @@ import com.example.realworld.domain.dto.ArticleDto;
 import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
+import com.example.realworld.domain.model.UpdateArticleParam;
 import com.example.realworld.exception.NoAuthorizationException;
 import com.example.realworld.exception.ResourceNotFoundException;
+import com.example.realworld.service.ArticleQueryService;
 import com.example.realworld.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import java.util.List;
 public class ArticlesController {
 
     private final ArticleService articleService;
+
+    private final ArticleQueryService articleQueryService;
 
     @PostMapping
     public ResponseEntity<?> createArticle(@Valid @RequestBody CreateArticleParam createArticleParam,
@@ -74,9 +78,33 @@ public class ArticlesController {
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
+    @PutMapping("/{slug}")
+    public ResponseEntity<?> updateArticle(@PathVariable("slug") String slug,
+                                           @Valid @RequestBody UpdateArticleParam updateArticleParam,
+                                           @AuthenticationPrincipal UserEntity user) {
+        /**
+         * todo
+         * 根据slug判断article是否存在
+         * 判断是否有权限修改
+         * 仅修改不为空的部分
+         * 返回最新结果
+         */
+        // todo articleService里创建发挥ArticleEntity的函数
+        // todo Article里创建一个update的函数
+        // todo mybatis里set需要判断是否为空
+        ArticleDto articleDto = articleService.findBySlug(slug)
+                .map(article -> {
+                    articleService.updateArticle(article, updateArticleParam);
+                    return articleService.findById(article.getId(), user);
+                })
+                .orElseThrow(ResourceNotFoundException::new);
+
+        return ResponseEntity.ok(articleDto);
+    }
+
     @DeleteMapping("/{slug}")
     public ResponseEntity<?> deleteArticle(@PathVariable("slug") String slug, @AuthenticationPrincipal UserEntity user) {
-        return articleService
+        return articleQueryService
                 .findBySlug(slug)
                 .map(article -> {
                     if (!user.getId().equals(article.getProfileDto().getId())) {

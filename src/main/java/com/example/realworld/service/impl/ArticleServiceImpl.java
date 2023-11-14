@@ -6,6 +6,7 @@ import com.example.realworld.domain.entity.ArticleEntity;
 import com.example.realworld.domain.entity.TagEntity;
 import com.example.realworld.domain.entity.UserEntity;
 import com.example.realworld.domain.model.CreateArticleParam;
+import com.example.realworld.domain.model.UpdateArticleParam;
 import com.example.realworld.mapper.ArticleMapper;
 import com.example.realworld.mapper.CommentMapper;
 import com.example.realworld.mapper.TagMapper;
@@ -60,12 +61,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public void updateArticle(ArticleEntity article, UpdateArticleParam updateArticle) {
+        article.update(updateArticle.getTitle(), updateArticle.getDescription(), updateArticle.getBody());
+        articleMapper.update(article);
+    }
+
+    @Override
     public void deleteArticle(String id) {
         articleMapper.deleteArticle(id);
     }
 
     @Override
-    public Optional<ArticleDto> findBySlug(String slug) {
+    public Optional<ArticleEntity> findBySlug(String slug) {
         return Optional.ofNullable(articleMapper.findBySlug(slug));
     }
 

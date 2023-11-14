@@ -13,13 +13,15 @@ public interface ArticleMapper {
 
     void insert(@Param("article") ArticleEntity article);
 
+    void update(@Param("article") ArticleEntity article);
+
     void deleteArticle(@Param("id") String id);
 
     TagEntity findTag(@Param("name") String name);
 
     void insertArticleTagRelation(@Param("articleId") String articleId, @Param("tagId") String tagId);
 
-    ArticleDto findBySlug(@Param("slug") String slug);
+    ArticleEntity findBySlug(@Param("slug") String slug);
 
     List<String> queryArticleIds(@Param("author") String author, @Param("favoritedBy") String favoritedBy, @Param("tag") String tag, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
